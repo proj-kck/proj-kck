@@ -4,6 +4,8 @@ const {
   products
 } = require('./');
 
+const beers = require('./seedData');
+
 async function buildTables() {
   try {
     client.connect();
@@ -11,6 +13,7 @@ async function buildTables() {
     console.log('Building tables...');
 
     await client.query(`
+      DROP TABLE IF EXISTS orders;
       DROP TABLE IF EXISTS users;
       DROP TABLE IF EXISTS products;
     `)
@@ -30,11 +33,20 @@ async function buildTables() {
         id SERIAL PRIMARY KEY,
         name VARCHAR(255) UNIQUE NOT NULL,
         description TEXT NOT NULL,
-        price VARCHAR(255) NOT NULL,
-        category VARCHAR(255) NOT NULL,
+        price FLOAT NOT NULL,
+        category VARCHAR(255),
         img TEXT
       );
     `);
+
+    // await client.query(`
+    //     CREATE TABLE orders (
+    //       id SERIAL PRIMARY KEY,
+    //       "userId" INTEGER REFERENCES users(id) NOT NULL,
+    //       address TEXT NOT NULL,
+    //       amount FLOAT NOT NULL
+    //     );
+    // `)
   } catch (error) {
     throw error;
   }
@@ -44,13 +56,9 @@ async function populateInitialData() {
   try {
 
     console.log('Creating products...')
-    await products.createProduct({
-      name: 'Yuengling',
-      description: '12pk Bottles - Light lager beer', 
-      price: '12.99', 
-      category: 'beer', 
-      img:'https://images.heb.com/is/image/HEBGrocery/005666012?fit=constrain,1&wid=800&hei=800&fmt=jpg&qlt=85,0&resMode=sharp2&op_usm=1.75,0.3,2,0'
-    })
+    for (const beer of beers) {
+      products.createProduct(beer)
+    }
     
     console.log('Creating users...')
     const user = await users.createUser({
@@ -58,6 +66,9 @@ async function populateInitialData() {
       password: 'testtest', 
       email: 'test@gmail.com'
     });
+
+    const product = await products.getProductById(4)
+    console.log(product)
     
   } catch (error) {
     throw error;
