@@ -1,23 +1,111 @@
 /* import fonts here */
 
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
+	font-family: Roboto;
 }
 
 :root {
-  /* define variables here */
-  --green: green;
-  --red: red;
-  --blue: blue;
+	/* define variables here */
+	--green: green;
+	--red: red;
+	--blue: blue;
 }
 
 html {
-  touch-action: manipulation;
+	touch-action: manipulation;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  height: 100vh;
-  width: 100vw;
+	margin: 0;
+	padding: 0;
+	height: 100vh;
+	width: 100vw;
+}
+navbar {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	text-align: center;
+}
+.navbar {
+	background-color: #f47c7c;
+	border-bottom: 1px solid #dee2e6;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	width: 100%;
+	margin: 0;
+	color: #ffffff;
+}
+.link {
+	background-color: #f47c7c;
+	transition: all 0.3s ease-in-out;
+	width: 100%;
+	height: 3rem;
+	justify-content: center;
+	padding-top: 1rem;
+	color: white;
+}
+.link:hover {
+	background-color: #ef9f9f;
+	color: #1e1d1d;
+}
+
+a {
+	text-decoration: none;
+}
+
+.title-cart {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+h2 {
+	color: white;
+	padding-right: 2rem;
+	padding-top: 1.25rem;
+}
+
+.section-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 40rem;
+	height: 100%;
+	background-color: black;
+	border-radius: 10px;
+	margin: 1rem;
+}
+
+li {
+	list-style-type: none;
+}
+
+.product {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	border-radius: 10px;
+	margin: 1rem;
+	text-align: center;
+}
+.product-list {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	width: 90%;
+	border-radius: 10px;
+	margin: 1rem;
+	text-align: center;
+}
+
+.product h2 {
+	color: #1e1d1d;
+	padding: 0;
 }
