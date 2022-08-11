@@ -74,7 +74,6 @@ async function updateUser(id, fields = {}) {
   }
   
 module.exports = {
-    // add your database adapter fns here
   client,
   getAllUsers,  
   createUser,
