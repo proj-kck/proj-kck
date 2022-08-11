@@ -11,4 +11,13 @@ router.get('/', async (req, res, next) => {
     }
 })
 
+router.get('/:productId', async (req, res, next) => {
+    try {
+        const { productId } = req.params;
+        const product = await products.getProductById(productId);
+        res.send(product);
+    } catch (error) {
+        throw error;
+    }
+})
 module.exports = router;
