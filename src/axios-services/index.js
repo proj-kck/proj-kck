@@ -19,20 +19,24 @@ import axios from 'axios';
 */
 
 export async function getAPIHealth() {
-  try {
-    const { data } = await axios.get('/api/health');
-    return data;
-  } catch (err) {
-    console.error(err);
-    return { healthy: false };
-  }
+	try {
+		const { data } = await axios.get('/api/health');
+		return data;
+	} catch (err) {
+		console.error(err);
+		return { healthy: false };
+	}
 }
 
-export async function getAllProducts(){
-  try {
-    const { data } = await axios.get('/api/products');
-    return data;
-  } catch (error) {
-    
-  }
+export async function getAllProducts() {
+	try {
+		const { data } = await axios.get('/api/products');
+		return data;
+	} catch (error) {}
+}
+export async function getProductById(id) {
+	try {
+		const { data } = await axios.get(`/api/products/${id}`);
+		return data;
+	} catch (error) {}
 }

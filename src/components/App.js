@@ -10,6 +10,7 @@ import Products from './Products';
 // where each adapter fetches specific info from our express server's /api route
 import { getAPIHealth } from '../axios-services';
 import '../style/App.css';
+import SingleProductView from './SingleProductView';
 
 const users = {
 	cameron: 'Cameron0617',
@@ -78,6 +79,10 @@ const App = () => {
 						<Route path='/home' element={<Home />} />
 						<Route path='/products' element={<Products />} />
 						<Route path='/register' element={<Register />}></Route>
+						<Route
+							path='/products/:id'
+							element={<SingleProductView />}
+						></Route>
 					</Routes>
 				</div>
 			</Router>
