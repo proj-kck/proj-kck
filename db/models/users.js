@@ -32,7 +32,7 @@ async function getUserById(userId) {
       SELECT id, username, email, is_admin
       FROM users
       WHERE id=$1;
-    `, [id])
+    `, [userId])
   } catch (error) {
     throw error;
   }
