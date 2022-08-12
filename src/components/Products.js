@@ -1,17 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@mui/material';
+import { getAllProducts } from '../axios-services';
 
 const products = [
 	{
 		name: 'Gin',
 		price: 19.99,
-		category: 'Liquor',
 		img: 'https://cdn.shoplightspeed.com/shops/643741/files/44756327/1500x4000x3/spirit-dry-gin-7-750ml.jpg',
 	},
 	{
 		name: 'Whiskey',
 		price: 29.99,
-		category: 'Liquor',
 		img: 'https://img.thewhiskyexchange.com/900/glvob.non11.jpg',
 	},
 	{
@@ -67,6 +66,16 @@ const products = [
 ];
 
 const Products = () => {
+	const [products, setProducts] = useState([]);
+
+	useEffect(() => {
+		async function getData() {
+			const data = await getAllProducts();
+			setProducts(data);
+		}
+		getData();
+	}, []);
+
 	return (
 		<div>
 			<ul className='product-list'>

@@ -13,10 +13,10 @@ async function createUser({username, password, email, isAdmin = false}) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const { rows: [user] } = await client.query(`
-      INSERT INTO users (username, password, email, "isAdmin")
+      INSERT INTO users (username, password, email, is_admin)
       VALUES($1, $2, $3, $4)
       ON CONFLICT DO NOTHING
-      RETURNING *;
+      RETURNING username, email, is_admin;
     `, [username, hashedPassword, email, isAdmin]);
 
     return user;
