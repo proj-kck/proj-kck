@@ -1,7 +1,7 @@
 const express = require('express');
 const usersRouter = express.Router();
 
-const { createUser, getAllUsers, getUserByUsername, } = require('../db');
+const { createUser, getAllUsers, getUserByUsername, getUser } = require('../db/users');
 
 const jwt = require('jsonwebtoken');
 usersRouter.get('/', async (req, res, next) =>  {
@@ -14,6 +14,7 @@ usersRouter.get('/', async (req, res, next) =>  {
         next({ name, message});
     }
 });
+
 usersRouter.post('/login', async (req, res, next) => {
 
     const { username, password } = req.body;
@@ -25,18 +26,13 @@ usersRouter.post('/login', async (req, res, next) => {
       });
     }
     try {
-      const user = await getUserByUsername(username);
-    if (user && user.password == password) {
-        const token = jwt.sign({ 
-          id: user.id, 
-          username
-        }, process.env.JWT_SECRET, {
-          expiresIn: '1w'
-        }); 
+      const user = await getUser({username, password})
+    if (user) {
+        const token = jwt.sign(user, process.env.JWT_SECRET, {expiresIn: '1w'}); 
         res.send({ 
           message: "you are logged in",
-          token 
-        });
+          token, 
+          user});
       } else {
         next({ 
           name: 'IncorrectCredentialsError', 
@@ -44,13 +40,13 @@ usersRouter.post('/login', async (req, res, next) => {
         });
       }
     } catch(error) {
-      console.log(error);
       next(error);
     }
 });
+
 usersRouter.post('/register', async (req, res, next) => {
 
-    const { username, password, name, location } = req.body;
+    const { username, password, email, is_admin } = req.body;
   
     try {
       const _user = await getUserByUsername(username);
@@ -64,18 +60,14 @@ usersRouter.post('/register', async (req, res, next) => {
     const user = await createUser({
         username,
         password,
-        name,
-        location,
+        email,
+        is_admin,
       });
-    const token = jwt.sign({ 
-        id: user.id, 
-        username
-      }, process.env.JWT_SECRET, {
-        expiresIn: '1w'
-      });
+    const token = jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: '1w' });
     res.send({ 
-        message: "Thanks for signing up!",
-        token 
+        message: "You are now registered.",
+        token,
+        user: user 
       });
     } catch ({ name, message }) {
       next({ name, message });

@@ -9,17 +9,10 @@ async function createUser({username, password, email, isAdmin = false}) {
     const hashedPassword = await bcrypt.hash(password, 10);
     
     const { rows: [user] } = await client.query(`
-<<<<<<< HEAD
-    INSERT INTO users (username, password, email, "isAdmin")
-    VALUES($1, $2, $3, $4)
-    ON CONFLICT DO NOTHING
-    RETURNING *;
-=======
       INSERT INTO users (username, password, email, is_admin)
       VALUES($1, $2, $3, $4)
       ON CONFLICT DO NOTHING
       RETURNING username, email, is_admin;
->>>>>>> 3a639da07eac9cb9d6a60425aed9ab74a52b8ed8
     `, [username, hashedPassword, email, isAdmin]);
     
     return user;
@@ -60,6 +53,25 @@ async function getUserById(userId) {
     throw error;
   }
 } 
+
+async function getUser({ username, password }) {
+  try {
+    const { rows: [user] } = await client.query(`
+      SELECT *
+      FROM users
+      WHERE username=$1;
+    `, [username]);
+
+    const verify = await bcrypt.compare(password, user.password);
+    delete user.password;
+    if (verify) {
+      return user;
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function updateUser(id, fields = {}) {
   const setString = Object.keys(fields).map(
     (key, index) => `"${ key }"=$${ index + 1 }`
@@ -86,4 +98,5 @@ module.exports = {
   createUser,
   getUserById,
   updateUser,
+  getUser
 };
