@@ -82,6 +82,8 @@ h2 {
 
 li {
 	list-style-type: none;
+	padding: none;
+	margin: none;
 }
 
 .product {
@@ -108,4 +110,15 @@ li {
 .product h2 {
 	color: #1e1d1d;
 	padding: 0;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	margin-top: 5rem;
+	min-height: 10rem;
+	justify-content: space-between;
+}
+.password-field {
+	padding-top: 2rem;
 }

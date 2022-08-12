@@ -11,8 +11,17 @@ import Products from './Products';
 import { getAPIHealth } from '../axios-services';
 import '../style/App.css';
 
+const users = {
+	cameron: 'Cameron0617',
+	user: 'password',
+	thing: 'stuff',
+};
+
 const App = () => {
 	const [APIHealth, setAPIHealth] = useState('');
+	const [username, setUsername] = useState('');
+	const [password, setPassword] = useState('');
+	const [loggedInUser, setLoggedInUser] = useState({});
 
 	useEffect(() => {
 		// follow this pattern inside your useEffect calls:
@@ -52,7 +61,20 @@ const App = () => {
 				</div>
 				<div className='main'>
 					<Routes>
-						<Route path='/login' element={<Login />} />
+						<Route
+							path='/login'
+							element={
+								<Login
+									setUsername={setUsername}
+									setPassword={setPassword}
+									username={username}
+									password={password}
+									users={users}
+									loggedInUser={loggedInUser}
+									setLoggedInUser={setLoggedInUser}
+								/>
+							}
+						/>
 						<Route path='/home' element={<Home />} />
 						<Route path='/products' element={<Products />} />
 						<Route path='/register' element={<Register />}></Route>

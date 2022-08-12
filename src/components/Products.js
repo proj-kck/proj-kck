@@ -5,11 +5,13 @@ const products = [
 	{
 		name: 'Gin',
 		price: 19.99,
+		category: 'Liquor',
 		img: 'https://cdn.shoplightspeed.com/shops/643741/files/44756327/1500x4000x3/spirit-dry-gin-7-750ml.jpg',
 	},
 	{
 		name: 'Whiskey',
 		price: 29.99,
+		category: 'Liquor',
 		img: 'https://img.thewhiskyexchange.com/900/glvob.non11.jpg',
 	},
 	{
@@ -74,7 +76,7 @@ const Products = () => {
 							<div className='product'>
 								<img
 									src={product.img}
-									alt={`Image of ${product.name}`}
+									alt={`${product.name}`}
 									height='200px'
 								/>
 								<h2>{product.name}</h2>
