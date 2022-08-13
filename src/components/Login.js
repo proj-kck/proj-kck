@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TextField, Box, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Login = (props) => {
+	const navigate = useNavigate();
 	const [username, setUsername] = [props.username, props.setUsername];
 	const [password, setPassword] = [props.password, props.setPassword];
+	const loggedInUser = props.loggedInUser;
 	const users = props.users;
+
+	useEffect(() => {
+		if (loggedInUser.username) {
+			alert(`Logged in already as ${loggedInUser.username}`);
+			navigate(-1);
+		}
+	});
 
 	const handleUsernameChange = (e) => {
 		setUsername(e.target.value);
@@ -18,7 +28,11 @@ const Login = (props) => {
 		e.preventDefault();
 		if (password === users[username]) {
 			alert('Welcome');
-			props.setLoggedInUser({});
+			const user = {};
+			user.username = username;
+			user.password = password;
+			props.setLoggedInUser(user);
+			navigate('/home');
 		} else {
 			alert('Bugging out');
 		}

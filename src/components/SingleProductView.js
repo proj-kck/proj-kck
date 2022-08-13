@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
+import { Button } from '@mui/material';
 import { useState } from 'react';
-
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getProductById } from '../axios-services';
+import './SingleProductPage.css';
 
 const SingleProductView = () => {
+	let navigate = useNavigate();
 	const { id } = useParams();
 	const [product, setProduct] = useState({});
 
@@ -12,18 +14,22 @@ const SingleProductView = () => {
 		async function getData() {
 			const data = await getProductById(id);
 			setProduct(data);
+			if (!data.id) {
+				navigate(-1);
+			}
 		}
 		getData();
 	}, []);
-	console.log(product);
+
 	return (
-		<div>
+		<div id='single-product'>
 			<img src={product.img} alt={product.name} />
-			<div>
+			<div className='product-info'>
 				<h2>
 					{product.name} ${product.price}
 				</h2>
 				<h3>{product.description}</h3>
+				<Button variant='contained'>Add to cart</Button>
 			</div>
 		</div>
 	);

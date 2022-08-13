@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { getAllProducts } from '../axios-services';
 
@@ -20,14 +21,17 @@ const Products = () => {
 					return (
 						<li id={index}>
 							<div className='product'>
-								<img
-									src={product.img}
-									alt={`Image of ${product.name}`}
-									height='200px'
-								/>
-								<h2>{product.name}</h2>
-								<h3>${product.price}</h3>
+								<Link to={`/products/id/${product.id}`}>
+									<img
+										src={product.img}
+										alt={`${product.name}`}
+										height='200px'
+										className='product-img'
+									/>
+								</Link>
 								<Button variant='contained'>Add to cart</Button>
+								<h2>${product.price}</h2>
+								<h4>{product.name}</h4>
 							</div>
 						</li>
 					);

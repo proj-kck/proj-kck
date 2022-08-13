@@ -80,7 +80,7 @@ const App = () => {
 						<Route path='/products' element={<Products />} />
 						<Route path='/register' element={<Register />}></Route>
 						<Route
-							path='/products/:id'
+							path='/products/id/:id'
 							element={<SingleProductView />}
 						></Route>
 					</Routes>
