@@ -1,5 +1,6 @@
 const apiRouter = require('express').Router();
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 const { JWT_SECRET } = process.env;
 
 const { users } = require('../db')
@@ -46,6 +47,9 @@ apiRouter.get('/health', (req, res, next) => {
 
 const productsRouter = require('./products');
 apiRouter.use('/products', productsRouter);
+
+const usersRouter = require('./users');
+apiRouter.use('/users', usersRouter)
 
 apiRouter.use((error, req, res, next) => {
   res.send({

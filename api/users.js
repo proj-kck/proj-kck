@@ -1,18 +1,34 @@
 const express = require('express');
 const usersRouter = express.Router();
-
-const { createUser, getAllUsers, getUserByUsername, getUser } = require('../db/users');
-
+require('dotenv').config();
+const { JWT_SECRET } = process.env;
 const jwt = require('jsonwebtoken');
+
+const { createUser, getAllUsers, getUserByUsername, getUser, getUserByEmail } = require('../db/models/users');
+
 usersRouter.get('/', async (req, res, next) =>  {
+  if (req.user) {
     try {
+      if (!req.user.is_admin) {
+        next({
+          name: 'Unauthorized',
+          message: 'You are not authorized for this action.'
+        });
+      } else {
         const users = await getAllUsers();
         res.send({
             users
         });
+      }
     } catch ({ name, message }) {
         next({ name, message});
     }
+  } else {
+    next({
+      name: 'Unauthorized',
+      message: 'You are not authorized for this action.'
+    });
+  }
 });
 
 usersRouter.post('/login', async (req, res, next) => {
@@ -30,7 +46,7 @@ usersRouter.post('/login', async (req, res, next) => {
     if (user) {
         const token = jwt.sign(user, process.env.JWT_SECRET, {expiresIn: '1w'}); 
         res.send({ 
-          message: "you are logged in",
+          message: "You are logged in.",
           token, 
           user});
       } else {
@@ -50,20 +66,29 @@ usersRouter.post('/register', async (req, res, next) => {
   
     try {
       const _user = await getUserByUsername(username);
+      const __user = await getUserByEmail(email);
     
     if (_user) {
         next({
           name: 'UserExistsError',
-          message: 'A user by that username already exists'
+          message: `Username ${username} already exists`
         });
       }
+      if (__user) {
+        next({
+          name: 'EmailExistsError',
+          message: `An account already exists with the email ${email}`
+        });
+      }
+    
     const user = await createUser({
         username,
         password,
         email,
         is_admin,
       });
-    const token = jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: '1w' });
+
+    const token = jwt.sign({ user }, JWT_SECRET, { expiresIn: '1w' });
     res.send({ 
         message: "You are now registered.",
         token,
@@ -72,5 +97,6 @@ usersRouter.post('/register', async (req, res, next) => {
     } catch ({ name, message }) {
       next({ name, message });
     } 
-}); 
+});
+
 module.exports = usersRouter;

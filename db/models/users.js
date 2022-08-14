@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 
 
-async function createUser({username, password, email, isAdmin = false}) {
+async function createUser({username, password, email, is_admin = false}) {
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     
@@ -12,8 +12,8 @@ async function createUser({username, password, email, isAdmin = false}) {
       INSERT INTO users (username, password, email, is_admin)
       VALUES($1, $2, $3, $4)
       ON CONFLICT DO NOTHING
-      RETURNING username, email, is_admin;
-    `, [username, hashedPassword, email, isAdmin]);
+      RETURNING id, username, email, is_admin;
+    `, [username, hashedPassword, email, is_admin]);
     
     return user;
   } catch (error) {
@@ -22,21 +22,22 @@ async function createUser({username, password, email, isAdmin = false}) {
 }
 
 async function getAllUsers() {
-  /* this adapter should fetch a list of users from your db */
   try {
-    const { rows } = await client.query(`
-    SELECT id, username, email, "isAdmin"
+    const { rows: users } = await client.query(`
+    SELECT id, username, email, is_admin
     FROM users;
     `);
-    return rows;
+    return users;
   } catch (error) {
     throw error;
   }
 }
+
+
 async function getUserById(userId) {
   try {
     const {rows: [user] } = await client.query(`
-    SELECT id, username, email, "isAdmin"
+    SELECT id, username, email, is_admin
     FROM users
     WHERE id=${userId}
     `);
@@ -46,13 +47,40 @@ async function getUserById(userId) {
         message: "A user with that id does not exist"
       }
     }
-    user.products = await getProductsByUser(userId);
     
     return user;
   } catch (error) {
     throw error;
   }
 } 
+
+async function getUserByUsername(username) {
+  try {
+    const { rows: [user] } = await client.query(`
+      SELECT username, email
+      FROM users
+      WHERE username=$1;
+    `, [username]);
+
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getUserByEmail(email) {
+  try {
+    const { rows: [user] } = await client.query(`
+      SELECT username, email
+      FROM users
+      WHERE email=$1;
+    `, [email]);
+
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}
 
 async function getUser({ username, password }) {
   try {
@@ -98,5 +126,7 @@ module.exports = {
   createUser,
   getUserById,
   updateUser,
-  getUser
+  getUser,
+  getUserByUsername,
+  getUserByEmail
 };
