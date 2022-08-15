@@ -10,11 +10,17 @@ export async function getAPIHealth() {
 	}
 }
 
-export async function getAllProducts() {
+export async function getAllProducts(category) {
 	try {
-		const { data } = await axios.get('/api/products');
+    let apiString = `/api/products`;
+    if (category){
+      apiString += `/${category}`
+    }
+		const { data } = await axios.get(apiString);
 		return data;
-	} catch (error) {}
+	} catch (error) {
+    throw error;
+  }
 }
 
 export async function getProductById(id) {
@@ -35,7 +41,7 @@ export async function login(username, password) {
 
 export async function register(username, password, email, is_admin) {
 	try {
-		const { data } = await axios.post('/api/register', {
+		const { data } = await axios.post('/api/users/register', {
 			username,
 			password,
 			email,
