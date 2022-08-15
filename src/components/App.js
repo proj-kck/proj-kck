@@ -102,8 +102,6 @@ const App = () => {
 					</Routes>
 				</div>
 			</Router>
-
-			<h1>Hello, World!</h1>
 			<p>API Status: {APIHealth}</p>
 		</div>
 	);
