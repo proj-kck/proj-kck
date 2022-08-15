@@ -1,7 +1,7 @@
 const express = require('express');
 const ordersRouter = express.Router();
 
-const {createOrder, closeOrder } = require('../db/models/orders')
+const {createOrder, closeOrder, orderStatus } = require('../db/models/orders')
 
 const jwt = require('jsonwebtoken');
 
@@ -34,6 +34,6 @@ ordersRouter.delete('/:orderId', async (req, res, next) => {
         next (error);
     }
 });
-
+ordersRouter.patch()
 module.exports = ordersRouter;
 
