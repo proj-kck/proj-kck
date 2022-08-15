@@ -20,4 +20,5 @@ router.get('/:productId', async (req, res, next) => {
         throw error;
     }
 })
+
 module.exports = router;

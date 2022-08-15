@@ -1,14 +1,14 @@
 // grab our db client connection to use with our adapters
 const client = require('../client');
 
-async function createProduct({name, description, price, category, img}) {
+async function createProduct({name, description, price, category, img, quantity}) {
     try {
         const { rows: [product] } = await client.query(`
-            INSERT INTO products(name, description, price, category, img)
-            VALUES($1, $2, $3, $4, $5)
+            INSERT INTO products(name, description, price, category, img, quantity)
+            VALUES($1, $2, $3, $4, $5, $6)
             ON CONFLICT (name) DO NOTHING
             RETURNING *;
-        `, [name, description, price, category, img]);
+        `, [name, description, price, category, img, quantity]);
 
         return product;
     } catch (error) {
