@@ -52,7 +52,7 @@ export async function login(username, password) {
 
 export async function register(username, password, email, is_admin) {
 	try {
-		const { data } = await axios.post('/api/register', {
+		const { data } = await axios.post('/api/users/register', {
 			username,
 			password,
 			email,
