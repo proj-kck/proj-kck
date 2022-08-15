@@ -33,6 +33,24 @@ export async function getAllProducts(){
     const { data } = await axios.get('/api/products');
     return data;
   } catch (error) {
-    
+    throw error;
+  }
+}
+
+export async function login(username, password){
+  try {
+    const { data } = await axios.post('/api/login', {username, password});
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function register(username, password, email, is_admin){
+  try {
+    const { data } = await axios.post('/api/register', {username, password, email, is_admin});
+    return data;
+  } catch (error) {
+    throw error;
   }
 }

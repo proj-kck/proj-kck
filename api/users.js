@@ -1,19 +1,36 @@
 const express = require('express');
 const usersRouter = express.Router();
-
-const { createUser, getAllUsers, getUserByUsername, } = require('../db');
-
+require('dotenv').config();
+const { JWT_SECRET } = process.env;
 const jwt = require('jsonwebtoken');
+
+const { createUser, getAllUsers, getUserByUsername, getUser, getUserByEmail } = require('../db/models/users');
+
 usersRouter.get('/', async (req, res, next) =>  {
+  if (req.user) {
     try {
+      if (!req.user.is_admin) {
+        next({
+          name: 'Unauthorized',
+          message: 'You are not authorized for this action.'
+        });
+      } else {
         const users = await getAllUsers();
         res.send({
             users
         });
+      }
     } catch ({ name, message }) {
         next({ name, message});
     }
+  } else {
+    next({
+      name: 'Unauthorized',
+      message: 'You are not authorized for this action.'
+    });
+  }
 });
+
 usersRouter.post('/login', async (req, res, next) => {
 
     const { username, password } = req.body;
@@ -25,18 +42,13 @@ usersRouter.post('/login', async (req, res, next) => {
       });
     }
     try {
-      const user = await getUserByUsername(username);
-    if (user && user.password == password) {
-        const token = jwt.sign({ 
-          id: user.id, 
-          username
-        }, process.env.JWT_SECRET, {
-          expiresIn: '1w'
-        }); 
+      const user = await getUser({username, password})
+    if (user) {
+        const token = jwt.sign(user, process.env.JWT_SECRET, {expiresIn: '1w'}); 
         res.send({ 
-          message: "you are logged in",
-          token 
-        });
+          message: "You are logged in.",
+          token, 
+          user});
       } else {
         next({ 
           name: 'IncorrectCredentialsError', 
@@ -44,41 +56,47 @@ usersRouter.post('/login', async (req, res, next) => {
         });
       }
     } catch(error) {
-      console.log(error);
       next(error);
     }
 });
+
 usersRouter.post('/register', async (req, res, next) => {
 
-    const { username, password, name, location } = req.body;
+    const { username, password, email, is_admin } = req.body;
   
     try {
       const _user = await getUserByUsername(username);
+      const __user = await getUserByEmail(email);
     
     if (_user) {
         next({
           name: 'UserExistsError',
-          message: 'A user by that username already exists'
+          message: `Username ${username} already exists`
         });
       }
+      if (__user) {
+        next({
+          name: 'EmailExistsError',
+          message: `An account already exists with the email ${email}`
+        });
+      }
+    
     const user = await createUser({
         username,
         password,
-        name,
-        location,
+        email,
+        is_admin,
       });
-    const token = jwt.sign({ 
-        id: user.id, 
-        username
-      }, process.env.JWT_SECRET, {
-        expiresIn: '1w'
-      });
+
+    const token = jwt.sign({ user }, JWT_SECRET, { expiresIn: '1w' });
     res.send({ 
-        message: "Thanks for signing up!",
-        token 
+        message: "You are now registered.",
+        token,
+        user: user 
       });
     } catch ({ name, message }) {
       next({ name, message });
     } 
-}); 
+});
+
 module.exports = usersRouter;
