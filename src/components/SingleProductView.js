@@ -19,7 +19,7 @@ const SingleProductView = () => {
 			}
 		}
 		getData();
-	}, []);
+	});
 
 	return (
 		<div id='single-product'>
