@@ -1,18 +1,15 @@
 const express = require('express');
 const ordersRouter = express.Router();
 
-const {createOrder, getOrderById, orderStatus} = require('../db');
+const {createOrder, closeOrder } = require('../db/models/orders')
 
 const jwt = require('jsonwebtoken');
 
-ordersRouter.post('/', requireUser, async (req, res, next) => {
-    
-    const { user_id } = req.body;
-    
+ordersRouter.post('/:user_id', async (req, res, next) => {
+    const { user_id } = req.params;
     try {
-        // orderData.user_id = req.order.id;
 
-        // const orders = await createOrder(orderData);
+        const order = await createOrder(user_id);
 
         if (order) {
             res.send(order);
@@ -26,6 +23,17 @@ ordersRouter.post('/', requireUser, async (req, res, next) => {
         next({status, message});
     }
 });
-
+ordersRouter.delete('/:orderId', async (req, res, next) => {
+    try {
+        const { orderId } = req.params;
+        const order = await closeOrder(orderId);
+        res.send ({
+            order
+        });
+    } catch (error) {
+        next (error);
+    }
+});
 ordersRouter.patch()
+module.exports = ordersRouter;
 
