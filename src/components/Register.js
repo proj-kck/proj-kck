@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { TextField, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { register } from '../axios-services';
@@ -8,14 +8,6 @@ const Register = (props) => {
 	const [username, setUsername] = [props.username, props.setUsername];
 	const [password, setPassword] = [props.password, props.setPassword];
 	const [email, setEmail] = React.useState('');
-	const loggedInUser = props.loggedInUser;
-
-	useEffect(() => {
-		if (loggedInUser.username) {
-			alert(`Logged in already as ${loggedInUser.username}`);
-			navigate(-1);
-		}
-	});
 
 	const handleUsernameChange = (e) => {
 		setUsername(e.target.value);
@@ -30,7 +22,18 @@ const Register = (props) => {
 		e.preventDefault();
 		try {
 			let resp = await register(username, password, email, false);
-			console.log(resp);
+			let token = resp.token;
+			if (!resp.token) {
+				alert('User already exists');
+			} else {
+				let user = { username, token };
+				localStorage.setItem('token', token);
+				props.setLoggedInUser(user);
+				navigate('/products');
+			}
+			setPassword('');
+			setUsername('');
+			setEmail('');
 		} catch (error) {
 			console.log(error);
 		}
