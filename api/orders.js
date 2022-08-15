@@ -34,6 +34,6 @@ ordersRouter.delete('/:orderId', async (req, res, next) => {
         next (error);
     }
 });
-ordersRouter.patch()
+
 module.exports = ordersRouter;
 
