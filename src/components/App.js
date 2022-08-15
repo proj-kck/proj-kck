@@ -78,7 +78,20 @@ const App = () => {
 						/>
 						<Route path='/home' element={<Home />} />
 						<Route path='/products' element={<Products />} />
-						<Route path='/register' element={<Register />}></Route>
+						<Route
+							path='/register'
+							element={
+								<Register
+									setUsername={setUsername}
+									setPassword={setPassword}
+									username={username}
+									password={password}
+									users={users}
+									loggedInUser={loggedInUser}
+									setLoggedInUser={setLoggedInUser}
+								/>
+							}
+						></Route>
 						<Route
 							path='/products/id/:id'
 							element={<SingleProductView />}
