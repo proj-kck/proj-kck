@@ -31,7 +31,7 @@ async function addProductToOrder(orders_id, product_id, price_at_purchase, quant
 }
 
 async function getAllProductsOnOrder(orders_id) {
-
+    
 }
 
 async function updateProductOrders(id, fields = {}) {
