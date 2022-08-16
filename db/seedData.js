@@ -207,6 +207,39 @@ const spirits = [
     img: 'https://image.harrods.com/the-dalmore-30-year-old-2021-edition-highland-single-malt-scotch-whisky-70cl_17520380_36832872_2048.jpg'},
 ]
 
+const users = [
+    {
+        username: 'JohnSnow',
+        password: 'winteriscoming',
+        email: 'king@inthenorth.com',
+        admin: false
+    },
+    {
+        username: 'admin',
+        password: 'admin',
+        email: 'admin@admin.com',
+        admin: true
+    },
+    {
+        username: 'ketsy',
+        password: 'ketsy',
+        email: 'ketsy@ketsy.com',
+        admin: true
+    },
+    {
+        username: 'cameron',
+        password: 'cameron',
+        email: 'cameron@cameron.com',
+        admin: true
+    },
+    {
+        username: 'kenny',
+        password: 'kenny',
+        email: 'kenny@kenny.com',
+        admin: true
+    }
+]
+
 module.exports = {
-    beers, wines, spirits
+    beers, wines, spirits, users
 }

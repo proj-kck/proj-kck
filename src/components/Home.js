@@ -1,19 +1,20 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
 	return (
 		<div>
 			<a href='/'>
-				<div className='section-container'>
+				<Link className='section-container' to='/products/wine'>
 					<h1>Wine</h1>
-				</div>
+				</Link>
 			</a>
-			<div className='section-container'>
+			<Link className='section-container' to='/products/spirits'>
 				<h1>Liquor</h1>
-			</div>
-			<div className='section-container'>
+			</Link>
+			<Link className='section-container' to='/products/beer'>
 				<h1>Beer</h1>
-			</div>
+			</Link>
 		</div>
 	);
 };

@@ -29,7 +29,22 @@ async function closeOrder(orders_id){
     }
 }
 
+async function getOrderStatus(orders_id) {
+    try {
+        const { rows: [order] } = await client.query(`
+            SELECT is_active
+            FROM orders
+            WHERE id=${orders_id}
+        `);
+
+        return order;
+    } catch (error) {
+        throw error;    
+    }
+}
+
 module.exports = {
     createOrder,
-    closeOrder
+    closeOrder,
+    getOrderStatus
 }

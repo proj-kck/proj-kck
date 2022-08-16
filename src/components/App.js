@@ -12,12 +12,6 @@ import { getAPIHealth } from '../axios-services';
 import '../style/App.css';
 import SingleProductView from './SingleProductView';
 
-const users = {
-	cameron: 'Cameron0617',
-	user: 'password',
-	thing: 'stuff',
-};
-
 const App = () => {
 	const [APIHealth, setAPIHealth] = useState('');
 	const [username, setUsername] = useState('');
@@ -70,7 +64,7 @@ const App = () => {
 									setPassword={setPassword}
 									username={username}
 									password={password}
-									users={users}
+									// users={users}
 									loggedInUser={loggedInUser}
 									setLoggedInUser={setLoggedInUser}
 								/>
@@ -78,7 +72,23 @@ const App = () => {
 						/>
 						<Route path='/home' element={<Home />} />
 						<Route path='/products' element={<Products />} />
-						<Route path='/register' element={<Register />}></Route>
+						<Route path='/products/beer' element={<Products category='beer'/>} />
+						<Route path='/products/wine' element={<Products category='wine'/>} />
+						<Route path='/products/spirits' element={<Products category='spirits'/>} />
+						<Route
+							path='/register'
+							element={
+								<Register
+									setUsername={setUsername}
+									setPassword={setPassword}
+									username={username}
+									password={password}
+									// users={users}
+									loggedInUser={loggedInUser}
+									setLoggedInUser={setLoggedInUser}
+								/>
+							}
+						></Route>
 						<Route
 							path='/products/id/:id'
 							element={<SingleProductView />}
@@ -86,8 +96,6 @@ const App = () => {
 					</Routes>
 				</div>
 			</Router>
-
-			<h1>Hello, World!</h1>
 			<p>API Status: {APIHealth}</p>
 		</div>
 	);
