@@ -8,19 +8,19 @@ const jwt = require('jsonwebtoken');
 ordersRouter.post('/:user_id', async (req, res, next) => {
     const { user_id } = req.params;
     try {
-
+        //require logged in
         const order = await createOrder(user_id);
 
         if (order) {
             res.send(order);
         } else {
             next({
-                status: 'OrderCreationError',
+                title: 'OrderCreationError',
                 message: 'There was an error creating your order. Please try again.'
             })
         }
-    } catch ({status, message}) {
-        next({status, message});
+    } catch (error) {
+        next(error);
     }
 });
 ordersRouter.patch('/:orderId', async (req, res, next) => {
