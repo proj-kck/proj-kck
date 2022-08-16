@@ -31,7 +31,17 @@ async function addProductToOrder(orders_id, product_id, price_at_purchase, quant
 }
 
 async function getAllProductsOnOrder(orders_id) {
-    
+    try {
+        const { rows: products_on_order } = await client.query(`
+            SELECT * 
+            FROM product_orders
+            WHERE orders_id=$1
+        `, [orders_id]);
+
+        return products_on_order;
+    } catch (error) {
+        throw error;
+    }
 }
 
 async function updateProductOrders(id, fields = {}) {

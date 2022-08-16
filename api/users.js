@@ -4,99 +4,106 @@ require('dotenv').config();
 const { JWT_SECRET } = process.env;
 const jwt = require('jsonwebtoken');
 
-const { createUser, getAllUsers, getUserByUsername, getUser, getUserByEmail } = require('../db/models/users');
+const {
+	createUser,
+	getAllUsers,
+	getUserByUsername,
+	getUser,
+	getUserByEmail,
+} = require('../db/models/users');
 
-usersRouter.get('/', async (req, res, next) =>  {
-  if (req.user) {
-    try {
-      if (!req.user.is_admin) {
-        next({
-          name: 'Unauthorized',
-          message: 'You are not authorized for this action.'
-        });
-      } else {
-        const users = await getAllUsers();
-        res.send({
-            users
-        });
-      }
-    } catch ({ name, message }) {
-        next({ name, message});
-    }
-  } else {
-    next({
-      name: 'Unauthorized',
-      message: 'You are not authorized for this action.'
-    });
-  }
+usersRouter.get('/', async (req, res, next) => {
+	if (req.user) {
+		try {
+			if (!req.user.is_admin) {
+				next({
+					name: 'Unauthorized',
+					message: 'You are not authorized for this action.',
+				});
+			} else {
+				const users = await getAllUsers();
+				res.send({
+					users,
+				});
+			}
+		} catch ({ name, message }) {
+			next({ name, message });
+		}
+	} else {
+		next({
+			name: 'Unauthorized',
+			message: 'You are not authorized for this action.',
+		});
+	}
 });
 
 usersRouter.post('/login', async (req, res, next) => {
+	const { username, password } = req.body;
 
-    const { username, password } = req.body;
-
-    if (!username || !password) {
-      next({
-        name: "MissingCredentialsError",
-        message: "Please provide a username and password"
-      });
-    }
-    try {
-      const user = await getUser({username, password})
-    if (user) {
-        const token = jwt.sign(user, process.env.JWT_SECRET, {expiresIn: '1w'}); 
-        res.send({ 
-          message: "You are logged in.",
-          token, 
-          user});
-      } else {
-        next({ 
-          name: 'IncorrectCredentialsError', 
-          message: 'Username or password is incorrect'
-        });
-      }
-    } catch(error) {
-      next(error);
-    }
+	if (!username || !password) {
+		next({
+			name: 'MissingCredentialsError',
+			message: 'Please provide a username and password',
+		});
+	}
+	try {
+		const user = await getUser({ username, password });
+		if (user) {
+			const token = jwt.sign(user, process.env.JWT_SECRET, {
+				expiresIn: '1w',
+			});
+			res.send({
+				message: 'You are logged in.',
+				token,
+				user,
+			});
+		} else {
+			next({
+				name: 'IncorrectCredentialsError',
+				message: 'Username or password is incorrect',
+			});
+		}
+	} catch (error) {
+		next(error);
+	}
 });
 
 usersRouter.post('/register', async (req, res, next) => {
+	const { username, password, email, is_admin } = req.body;
 
-    const { username, password, email, is_admin } = req.body;
-  
-    try {
-      const _user = await getUserByUsername(username);
-      const __user = await getUserByEmail(email);
-    
-    if (_user) {
-        next({
-          name: 'UserExistsError',
-          message: `Username ${username} already exists`
-        });
-      }
-      if (__user) {
-        next({
-          name: 'EmailExistsError',
-          message: `An account already exists with the email ${email}`
-        });
-      }
-    
-    const user = await createUser({
-        username,
-        password,
-        email,
-        is_admin,
-      });
+	try {
+		const _user = await getUserByUsername(username);
+		const __user = await getUserByEmail(email);
 
-    const token = jwt.sign({ user }, JWT_SECRET, { expiresIn: '1w' });
-    res.send({ 
-        message: "You are now registered.",
-        token,
-        user: user 
-      });
-    } catch ({ name, message }) {
-      next({ name, message });
-    } 
+		if (_user) {
+			next({
+				name: 'UserExistsError',
+				message: `Username ${username} already exists`,
+			});
+		}
+		if (__user) {
+			next({
+				name: 'EmailExistsError',
+				message: `An account already exists with the email ${email}`,
+			});
+		}
+
+		const user = await createUser({
+			username,
+			password,
+			email,
+			is_admin,
+		});
+
+		const token = jwt.sign({ user }, JWT_SECRET, { expiresIn: '1w' });
+		res.send({
+			message: 'You are now registered.',
+			token,
+			user: user,
+		});
+	} catch ({ name, message }) {
+		next({ name, message });
+	}
 });
 
 module.exports = usersRouter;

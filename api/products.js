@@ -11,6 +11,33 @@ router.get('/', async (req, res, next) => {
     }
 })
 
+router.get('/beer', async (req, res, next) => {
+    try {
+        const products_category = await products.getAllProductsByCategory('beer');
+        res.send(products_category);
+    } catch (error) {
+        throw error;
+    }
+})
+
+router.get('/wine', async (req, res, next) => {
+    try {
+        const products_category = await products.getAllProductsByCategory('wine');
+        res.send(products_category);
+    } catch (error) {
+        throw error;
+    }
+})
+
+router.get('/spirits', async (req, res, next) => {
+    try {
+        const products_category = await products.getAllProductsByCategory('spirit');
+        res.send(products_category);
+    } catch (error) {
+        throw error;
+    }
+})
+
 router.get('/:productId', async (req, res, next) => {
     try {
         const { productId } = req.params;

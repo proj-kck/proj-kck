@@ -1,23 +1,5 @@
 import axios from 'axios';
 
-// this file holds your frontend network request adapters
-// think about each function as a service that provides data
-// to your React UI through AJAX calls
-
-// for example, if we need to display a list of users
-// we'd probably want to define a getUsers service like this:
-
-/* 
-  export async function getUsers() {
-    try {
-      const { data: users } = await axios.get('/api/users')
-      return users;
-    } catch(err) {
-      console.error(err)
-    }
-  }
-*/
-
 export async function getAPIHealth() {
 	try {
 		const { data } = await axios.get('/api/health');
@@ -28,12 +10,19 @@ export async function getAPIHealth() {
 	}
 }
 
-export async function getAllProducts() {
+export async function getAllProducts(category) {
 	try {
-		const { data } = await axios.get('/api/products');
+    let apiString = `/api/products`;
+    if (category){
+      apiString += `/${category}`
+    }
+		const { data } = await axios.get(apiString);
 		return data;
-	} catch (error) {}
+	} catch (error) {
+    throw error;
+  }
 }
+
 export async function getProductById(id) {
 	try {
 		const { data } = await axios.get(`/api/products/${id}`);
@@ -43,7 +32,10 @@ export async function getProductById(id) {
 
 export async function login(username, password) {
 	try {
-		const { data } = await axios.post('/api/login', { username, password });
+		const { data } = await axios.post('/api/users/login', {
+			username,
+			password,
+		});
 		return data;
 	} catch (error) {
 		throw error;
@@ -52,7 +44,7 @@ export async function login(username, password) {
 
 export async function register(username, password, email, is_admin) {
 	try {
-		const { data } = await axios.post('/api/register', {
+		const { data } = await axios.post('/api/users/register', {
 			username,
 			password,
 			email,

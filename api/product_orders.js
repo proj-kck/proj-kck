@@ -18,14 +18,21 @@ productOrdersRouter.post('/add', async (req, res, next) => {
 productOrdersRouter.get('/:orders_id', async (req, res, next) => {
     try {
         const {orders_id} = req.params;
-        console.log(orders_id)
+        
         const products = await getAllProductsOnOrder(orders_id);
-       console.log(products)
         res.send(products);
     } catch (error) {
         next (error);
     }
 })
+// productOrdersRouter.patch('/:orders_id', async (req, res, next) => {
+//     try {
+//         const {orders_id} = req.params;
+//         const { product_id, price_at_purchase, quantity_order} = req.body;
+//     } catch (error) {
+        
+//     }
+// })
 
 module.exports=productOrdersRouter
 
