@@ -13,7 +13,7 @@ const Products = (props) => {
 			setProducts(data);
 		}
 		getData();
-	}, []);
+	});
 	const handleMouseEnter = (e) => {
 		e.target.parentNode.parentNode.parentNode.className +=
 			' hovered-product';
