@@ -1,7 +1,7 @@
 const express = require('express');
 const ordersRouter = express.Router();
 
-const {createOrder, closeOrder, orderStatus } = require('../db/models/orders')
+const {createOrder, closeOrder, orderStatus, getOrderStatus } = require('../db/models/orders')
 
 const jwt = require('jsonwebtoken');
 
@@ -27,13 +27,24 @@ ordersRouter.patch('/:orderId', async (req, res, next) => {
     try {
         const { orderId } = req.params;
         const order = await closeOrder(orderId);
-        res.send ({
+        res.send (
             order
-        });
+        );
     } catch (error) {
         next (error);
     }
 });
+ordersRouter.get('/:orderId', async(req, res, next) => {
+    try {
+        const { orderId } = req.params;
+        const orderStatus = await getOrderStatus(orderId);
+        res.send(
+            orderStatus
+        );
+    } catch (error) {
+       next (error);
+    }
+})
 
 module.exports = ordersRouter;
 
