@@ -32,7 +32,10 @@ export async function getProductById(id) {
 
 export async function login(username, password) {
 	try {
-		const { data } = await axios.post('/api/login', { username, password });
+		const { data } = await axios.post('/api/users/login', {
+			username,
+			password,
+		});
 		return data;
 	} catch (error) {
 		throw error;

@@ -12,12 +12,6 @@ import { getAPIHealth } from '../axios-services';
 import '../style/App.css';
 import SingleProductView from './SingleProductView';
 
-const users = {
-	cameron: 'Cameron0617',
-	user: 'password',
-	thing: 'stuff',
-};
-
 const App = () => {
 	const [APIHealth, setAPIHealth] = useState('');
 	const [username, setUsername] = useState('');
