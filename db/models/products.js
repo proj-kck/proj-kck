@@ -1,4 +1,3 @@
-// grab our db client connection to use with our adapters
 const client = require('../client');
 
 async function createProduct({name, description, price, category, img, quantity}) {
