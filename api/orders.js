@@ -23,7 +23,7 @@ ordersRouter.post('/:user_id', async (req, res, next) => {
         next({status, message});
     }
 });
-ordersRouter.delete('/:orderId', async (req, res, next) => {
+ordersRouter.patch('/:orderId', async (req, res, next) => {
     try {
         const { orderId } = req.params;
         const order = await closeOrder(orderId);
@@ -34,6 +34,6 @@ ordersRouter.delete('/:orderId', async (req, res, next) => {
         next (error);
     }
 });
-ordersRouter.patch()
+
 module.exports = ordersRouter;
 
