@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 ordersRouter.post('/:user_id', async (req, res, next) => {
     const { user_id } = req.params;
     try {
-        //require logged in
+        //require user to be logged in
         const order = await createOrder(user_id);
 
         if (order) {

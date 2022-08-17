@@ -10,7 +10,6 @@ router.get('/', async (req, res, next) => {
         throw error;
     }
 })
-
 router.get('/beer', async (req, res, next) => {
     try {
         const products_category = await products.getAllProductsByCategory('beer');
@@ -19,7 +18,6 @@ router.get('/beer', async (req, res, next) => {
         throw error;
     }
 })
-
 router.get('/wine', async (req, res, next) => {
     try {
         const products_category = await products.getAllProductsByCategory('wine');
@@ -28,7 +26,6 @@ router.get('/wine', async (req, res, next) => {
         throw error;
     }
 })
-
 router.get('/spirits', async (req, res, next) => {
     try {
         const products_category = await products.getAllProductsByCategory('spirit');
@@ -37,7 +34,6 @@ router.get('/spirits', async (req, res, next) => {
         throw error;
     }
 })
-
 router.get('/:productId', async (req, res, next) => {
     try {
         const { productId } = req.params;
@@ -47,5 +43,14 @@ router.get('/:productId', async (req, res, next) => {
         throw error;
     }
 })
+
+// router.delete('./:category', async (req, res, next) => {
+//     try {
+//         const {productId} = req.params;
+//         const 
+//     } catch (error) {
+        
+//     }
+// })
 
 module.exports = router;
