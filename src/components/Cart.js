@@ -8,16 +8,10 @@ const Cart = (props) => {
 	const cart = props.cart;
 	const setCart = props.setCart;
 	const [rows, setRows] = useState([]);
-	const handleDelete = (e) => {
+	const handleDelete = (e, id) => {
 		setCart(
 			cart.filter((item) => {
-				console.log(item);
-				console.log(item.id);
-				console.log(e.target.parentNode.parentNode.parentNode.id);
-				let bool =
-					item.id != e.target.parentNode.parentNode.parentNode.id;
-				console.log(bool);
-				return item.id != e.target.parentNode.parentNode.parentNode.id;
+				return item.id != id;
 			})
 		);
 	};
@@ -39,7 +33,10 @@ const Cart = (props) => {
 							<td>{value.quantity}</td>
 							<td>{value.price * value.quantity}</td>
 							<td>
-								<IconButton onClick={handleDelete}>
+								<IconButton
+									onClick={(e) => handleDelete(e, value.id)}
+									id={value.id}
+								>
 									<DeleteIcon></DeleteIcon>
 								</IconButton>
 							</td>
