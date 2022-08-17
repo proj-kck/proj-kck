@@ -30,12 +30,16 @@ const Products = (props) => {
 	const handleAddToCart = (e) => {
 		let newCart = [];
 		let isInCart = false;
+		let currItem = products[e.target.parentNode.parentNode.id - 1];
 		for (const product of cart) {
 			newCart.push(product);
 		}
 		for (const product of newCart) {
 			// eslint-disable-next-line
-			if (product.id == e.target.parentNode.parentNode.id) {
+			if (
+				product.name ==
+				products[e.target.parentNode.parentNode.id - 1].name
+			) {
 				product.quantity++;
 				isInCart = true;
 			}
@@ -44,8 +48,12 @@ const Products = (props) => {
 			setCart(newCart);
 			return;
 		}
-		let temp = products[e.target.parentNode.parentNode.id - 1];
-		temp.quantity = 1;
+		let temp = {
+			name: currItem.name,
+			price: currItem.price,
+			quantity: 1,
+			id: currItem.id,
+		};
 		newCart.push(temp);
 		setCart(newCart);
 	};
@@ -55,7 +63,7 @@ const Products = (props) => {
 			<ul className='product-list'>
 				{products.map((product, index) => {
 					return (
-						<li id={product.id}>
+						<li id={product.id} key={product.id}>
 							<div className='product'>
 								<Link to={`/products/id/${product.id}`}>
 									<img
