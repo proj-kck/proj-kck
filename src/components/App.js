@@ -4,11 +4,12 @@ import Login from './Login';
 import Register from './Register';
 import Home from './Home';
 import Products from './Products';
+import { getAllProductsOnOrder } from '../axios-services';
 
 // getAPIHealth is defined in our axios-services directory index.js
 // you can think of that directory as a collection of api adapters
 // where each adapter fetches specific info from our express server's /api route
-import { getAPIHealth } from '../axios-services';
+import { getAPIHealth, initiateOrder } from '../axios-services';
 import '../style/App.css';
 import SingleProductView from './SingleProductView';
 import Cart from './Cart';
@@ -18,19 +19,15 @@ const App = () => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [loggedInUser, setLoggedInUser] = useState({});
+	const [order, setOrder] = useState({});
 	const [cart, setCart] = useState([]);
 
 	useEffect(() => {
-		// follow this pattern inside your useEffect calls:
-		// first, create an async function that will wrap your axios service adapter
-		// invoke the adapter, await the response, and set the data
 		const getAPIStatus = async () => {
 			const { healthy } = await getAPIHealth();
 			setAPIHealth(healthy ? 'api is up! :D' : 'api is down :/');
 		};
 
-		// second, after you've defined your getter above
-		// invoke it immediately after its declaration, inside the useEffect callback
 		getAPIStatus();
 
 		if (localStorage.token && localStorage.username) {
@@ -39,7 +36,28 @@ const App = () => {
 				username: localStorage.username,
 			});
 		}
+
+		async function getOrder(){
+			const currOrder = await initiateOrder(localStorage.token);
+			setOrder(currOrder);
+		}
+		if (loggedInUser){
+			getOrder();
+		}
+
+		
 	}, []);
+
+	useEffect(() => {
+		const setProductsToCart = async () => {
+			const products = await getAllProductsOnOrder(order.id);
+			setCart(products[0]);
+		}
+		
+		if (order){
+			setProductsToCart();	
+		}
+	}, [order])
 
 	return (
 		<div className='app-container'>
@@ -87,19 +105,19 @@ const App = () => {
 						<Route path='/home' element={<Home />} />
 						<Route
 							path='/products'
-							element={<Products cart={cart} setCart={setCart} />}
+							element={<Products order={order} setOrder={setOrder} cart={cart} setCart={setCart} />}
 						/>
 						<Route
 							path='/products/beer'
-							element={<Products category='beer' />}
+							element={<Products order={order} setOrder={setOrder} cart={cart} setCart={setCart} category='beer' />}
 						/>
 						<Route
 							path='/products/wine'
-							element={<Products category='wine' />}
+							element={<Products order={order} setOrder={setOrder} cart={cart} setCart={setCart} category='wine' />}
 						/>
 						<Route
 							path='/products/spirits'
-							element={<Products category='spirits' />}
+							element={<Products order={order} setOrder={setOrder} cart={cart} setCart={setCart} category='spirits' />}
 						/>
 						<Route
 							path='/register'
@@ -120,7 +138,7 @@ const App = () => {
 						></Route>
 						<Route
 							path='/cart'
-							element={<Cart cart={cart} setCart={setCart} />}
+							element={<Cart order={order} cart={cart} setCart={setCart}/>}
 						></Route>
 					</Routes>
 				</div>

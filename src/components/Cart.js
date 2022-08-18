@@ -2,20 +2,34 @@ import React, { useEffect } from 'react';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from 'react';
-import { ConstructionOutlined } from '@mui/icons-material';
+// import { ConstructionOutlined } from '@mui/icons-material';
+import { getAllProductsOnOrder, removeProductFromOrder } from '../axios-services';
 
 const Cart = (props) => {
+	const order = props.order;
 	const cart = props.cart;
 	const setCart = props.setCart;
-	const [rows, setRows] = useState([]);
+
+	const setProductsToCart = async () => {
+		const products = await getAllProductsOnOrder(order.id);
+		setCart(products[0]);
+	}
+	
+
 	const handleDelete = (e, id) => {
-		setCart(
-			cart.filter((item) => {
-				return item.id != id;
-			})
-		);
+		const removeProduct = async () => {
+			const delProduct = await removeProductFromOrder(order, id);
+		} 
+		
+		removeProduct();
+
+		setProductsToCart();
+
 	};
-	useEffect(() => {});
+
+	useEffect(() => {
+		setProductsToCart();
+	}, [cart]);
 
 	return (
 		<div className='cart-area'>
@@ -26,23 +40,21 @@ const Cart = (props) => {
 					<th>Quantity</th>
 					<th>Price</th>
 				</tr>
-				{cart.map((value) => {
-					return (
-						<tr key={value.name} id={value.id}>
-							<td>{value.name}</td>
-							<td>{value.quantity}</td>
-							<td>{value.price * value.quantity}</td>
+				{cart.map((item) => (
+						<tr key={item.product_name} id={item.id} >
+							<td>{item.product_name}</td>
+							<td>{item.quantity_order}</td>
+							<td>{item.price_at_purchase * item.quantity_order}</td>
 							<td>
 								<IconButton
-									onClick={(e) => handleDelete(e, value.id)}
-									id={value.id}
+									onClick={(e) => handleDelete(e, item.product_id)}
+									id={item.product_id}
 								>
 									<DeleteIcon></DeleteIcon>
 								</IconButton>
 							</td>
 						</tr>
-					);
-				})}
+					))}
 			</table>
 		</div>
 	);

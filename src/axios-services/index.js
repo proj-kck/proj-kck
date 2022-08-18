@@ -10,12 +10,64 @@ export async function getAPIHealth() {
 	}
 }
 
+export async function initiateOrder(token){
+	try {
+		axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+		const { data } = await axios.post('/api/orders');
+		return data;
+	} catch (error) {
+		throw error;
+	}
+}
+
+export async function getAllProductsOnOrder(orders_id){
+	try {
+		const { data } = await axios.get(`/api/product_orders/${orders_id}`);
+		
+
+		return [data];
+	} catch (error) {
+		throw error;
+	}
+}
+
+export async function addProductToOrder(product, order){
+	try {
+		const postData = {
+			orders_id: order.id,
+			product_id: product.id,
+			product_name: product.name,
+			price_at_purchase: product.price,
+			quantity_order: 1
+		}
+
+		const { data } = await axios.post(`/api/product_orders/add`, postData);
+		return data;
+	} catch (error) {
+		throw error;
+	}
+}
+
+export async function removeProductFromOrder(order, product_id){
+	try {
+		const postData = {
+			orders_id: order.id,
+			product_id
+		}
+	
+		const { data } = await axios.delete('/api/product_orders/remove', {data: postData})
+		return data;
+	} catch (error) {
+		throw error;
+	}
+}
+
 export async function getAllProducts(category) {
 	try {
-    let apiString = `/api/products`;
-    if (category){
-      apiString += `/${category}`
-    }
+    	let apiString = `/api/products`;
+    	if (category){
+      		apiString += `/${category}`
+    	}
 		const { data } = await axios.get(apiString);
 		return data;
 	} catch (error) {

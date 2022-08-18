@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
-import { getAllProducts } from '../axios-services';
+import { addProductToOrder, getAllProducts, getAllProductsOnOrder } from '../axios-services';
+
 
 const Products = (props) => {
 	const [products, setProducts] = useState([]);
 	const category = props.category;
+	const cart = props.cart;
+	const setCart = props.setCart;
 
-	const [cart, setCart] = [props.cart, props.setCart];
+	const order = props.order;
+
 	useEffect(() => {
 		async function getData() {
 			const data = await getAllProducts(category);
@@ -15,48 +19,66 @@ const Products = (props) => {
 		}
 		getData();
 	}, [category]);
+
 	const handleMouseEnter = (e) => {
 		e.target.parentNode.parentNode.parentNode.className +=
 			' hovered-product';
 	};
+
 	const handleMouseLeave = (e) => {
 		e.target.parentNode.parentNode.parentNode.className = '';
 	};
+
 	const handleMouseEnterButton = (e) => {
 		e.target.parentNode.parentNode.className += ' hovered-product';
 	};
+
 	const handleMouseLeaveButton = (e) => {
 		e.target.parentNode.parentNode.className = '';
 	};
+
 	const handleAddToCart = (e) => {
-		let newCart = [];
-		let isInCart = false;
+		// let newCart = [];
+		// let isInCart = false;
 		let currItem = products[e.target.parentNode.parentNode.id - 1];
-		for (const product of cart) {
-			newCart.push(product);
+		// for (const product of cart) {
+		// 	newCart.push(product);
+		// }
+		const addProductFunc = async () => {
+			const addProduct = await addProductToOrder(currItem, order);
+			//console.log(addProduct)
 		}
-		for (const product of newCart) {
-			// eslint-disable-next-line
-			if (
-				product.name ==
-				products[e.target.parentNode.parentNode.id - 1].name
-			) {
-				product.quantity++;
-				isInCart = true;
-			}
+		addProductFunc();
+
+		const setProductsToCart = async () => {
+			const products = await getAllProductsOnOrder(order.id);
+			setCart(products[0]);
 		}
-		if (isInCart) {
-			setCart(newCart);
-			return;
-		}
-		let temp = {
-			name: currItem.name,
-			price: currItem.price,
-			quantity: 1,
-			id: currItem.id,
-		};
-		newCart.push(temp);
-		setCart(newCart);
+
+		setProductsToCart();
+		
+		// for (const product of newCart) {
+		// 	// eslint-disable-next-line
+		// 	if (
+		// 		product.name ==
+		// 		products[e.target.parentNode.parentNode.id - 1].name
+		// 	) {
+		// 		product.quantity++;
+		// 		isInCart = true;
+		// 	}
+		// }
+		// if (isInCart) {
+		// 	setCart(newCart);
+		// 	return;
+		// }
+		// let temp = {
+		// 	name: currItem.name,
+		// 	price: currItem.price,
+		// 	quantity: 1,
+		// 	id: currItem.id,
+		// };
+		// newCart.push(temp);
+		// setCart(newCart);
 	};
 
 	return (

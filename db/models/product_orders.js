@@ -1,7 +1,7 @@
 const client = require('../client');
 
 
-async function addProductToOrder(orders_id, product_id, price_at_purchase, quantity_order) {
+async function addProductToOrder(orders_id, product_id, product_name, price_at_purchase, quantity_order) {
     try {
         ///make sure order doesnt already contain this product
         const { rows: [p_order] } = await client.query(`
@@ -19,12 +19,43 @@ async function addProductToOrder(orders_id, product_id, price_at_purchase, quant
         }
 
         const { rows: [product_orders] } = await client.query(`
-            INSERT INTO product_orders (product_id, price_at_purchase, quantity_order, orders_id)
-            VALUES ($1, $2, $3, $4)
+            INSERT INTO product_orders (product_id, product_name, price_at_purchase, quantity_order, orders_id)
+            VALUES ($1, $2, $3, $4, $5)
             RETURNING *;
-        `, [product_id, price_at_purchase, quantity_order, orders_id]);
+        `, [product_id, product_name, price_at_purchase, quantity_order, orders_id]);
 
         return product_orders;
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function removeProductFromOrder(orders_id, product_id){
+    try {
+        ///make sure order already contains this product
+        console.log(orders_id, product_id)
+        const { rows: [p_order] } = await client.query(`
+            SELECT * 
+            FROM product_orders
+            WHERE orders_id=${orders_id}
+            AND product_id=${product_id}
+        `);
+        console.log(p_order)
+
+        //if it does, remove quantity
+        if (p_order && p_order.quantity_order > 1) {
+            p_order.quantity_order -= 1;
+            const update_order = await updateProductOrders(p_order.id, p_order);
+            return update_order;
+        } else if(p_order && p_order.quantity_order === 1){
+            const removedProduct = await client.query(`
+                DELETE FROM product_orders
+                WHERE orders_id=${orders_id}
+                AND product_id=${product_id}
+            `);
+            return removedProduct;
+        }
+        
     } catch (error) {
         throw error;
     }
@@ -38,6 +69,8 @@ async function getAllProductsOnOrder(orders_id) {
             WHERE orders_id=$1
         `, [orders_id]);
 
+
+        // console.log(products_on_order)
         return products_on_order;
     } catch (error) {
         throw error;
@@ -67,5 +100,6 @@ async function updateProductOrders(id, fields = {}) {
 module.exports = {
     addProductToOrder,
     getAllProductsOnOrder,
-    updateProductOrders
+    updateProductOrders,
+    removeProductFromOrder
 }

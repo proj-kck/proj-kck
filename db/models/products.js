@@ -18,8 +18,8 @@ async function createProduct({name, description, price, category, img, quantity}
 async function deleteProduct(product_id){
   try {
     const { rows: [product] } = await client.query(`
-      DELETE * FROM products
-      WHERE product_id=${product_id}
+      DELETE FROM products
+      WHERE id=${product_id}
     `);
 
     return product;

@@ -55,6 +55,7 @@ async function buildTables() {
         CREATE TABLE product_orders (
           id SERIAL PRIMARY KEY,
           product_id INTEGER REFERENCES products(id),
+          product_name VARCHAR(255) REFERENCES products(name),
           price_at_purchase FLOAT DEFAULT 0,
           quantity_order INTEGER,
           orders_id INTEGER REFERENCES orders(id)
@@ -81,15 +82,15 @@ async function populateInitialData() {
     console.log('Creating users...')
     initialUsers.map(user => {users.createUser(user)})
 
-    const user = initialUsers[1]
-    initialUsers.map(user => {users.createUser(user)})
-    console.log('Creating dummy orders...');
-    const orderTest = await orders.createOrder(user.id);
-    console.log('Creating dummy product_orders...');
-    const productToOrder = await products.getProductById(7)
-    const productToOrder2 = await products.getProductById(7)
-    const p_orders = await product_orders.addProductToOrder(orderTest.id, productToOrder.id, productToOrder.price, 4);
-    const p_orders2 = await product_orders.addProductToOrder(orderTest.id, productToOrder2.id, productToOrder2.price, 2);
+    // // const user = initialUsers[1]
+    // initialUsers.map(user => {users.createUser(user)})
+    // console.log('Creating dummy orders...');
+    // const orderTest = await orders.createOrder(user.id);
+    // console.log('Creating dummy product_orders...');
+    // const productToOrder = await products.getProductById(7)
+    // const productToOrder2 = await products.getProductById(7)
+    // const p_orders = await product_orders.addProductToOrder(orderTest.id, productToOrder.id, productToOrder.price, 4);
+    // const p_orders2 = await product_orders.addProductToOrder(orderTest.id, productToOrder2.id, productToOrder2.price, 2);
   } catch (error) {
     throw error;
   }
@@ -98,4 +99,4 @@ async function populateInitialData() {
 buildTables()
   .then(populateInitialData)
   .catch(console.error)
-  .finally(() => client.end());
+  .finally(client.end());
