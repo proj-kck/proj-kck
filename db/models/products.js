@@ -18,8 +18,8 @@ async function createProduct({name, description, price, category, img, quantity}
 async function deleteProduct(product_id){
   try {
     const { rows: [product] } = await client.query(`
-      DELETE * FROM products
-      WHERE product_id=${product_id}
+      DELETE FROM products
+      WHERE id=${product_id}
     `);
 
     return product;
@@ -39,7 +39,7 @@ async function updateProduct(product_id, fields = {}){
       const { rows: [product] } = await client.query(`
       UPDATE products
       SET ${ setString }
-      WHERE id=${ id }
+      WHERE id=${ product_id }
       RETURNING *;
       `, Object.values(fields));
       return product;
@@ -92,5 +92,7 @@ module.exports = {
   getProductById,
   getAllProducts,
   createProduct,
-  getAllProductsByCategory
+  getAllProductsByCategory, 
+  updateProduct,
+  deleteProduct
 };

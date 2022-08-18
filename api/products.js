@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { products } = require('../db');
+const {requireAdmin} = require('./utils');
 
 router.get('/', async (req, res, next) => {
     try {
@@ -43,14 +44,35 @@ router.get('/:productId', async (req, res, next) => {
         throw error;
     }
 })
-//Admin delete
-// router.delete('./:category', async (req, res, next) => {
-//     try {
-//         const {productId} = req.params;
-//         const 
-//     } catch (error) {
-        
-//     }
-// })
+
+router.patch('/:productId', requireAdmin, async (req, res, next) => {
+    try {
+        console.log(req.body)
+        const {productId} = req.params;
+        const {name, description, price, category, img, quantity} = req.body;
+        console.log(productId)
+        const updateFields = {}
+        if (name) {updateFields.name= name};
+        if (description) {updateFields.description= description};
+        if (price) {updateFields.price= price};
+        if (category) {updateFields.category= category};
+        if (img) {updateFields.img= img};
+        if (quantity) {updateFields.quantity= quantity};
+        const product = await products.updateProduct(productId, updateFields);
+        res.send(product);
+    } catch (error) {
+        next (error);
+    }
+})
+
+router.delete('/:productId', requireAdmin,async (req, res, next) => {
+    try {
+        const {productId} = req.params;
+        const product = await products.deleteProduct(productId);
+        res.send(product);
+    } catch (error) {
+        next (error);
+    }
+})
 
 module.exports = router;
