@@ -38,15 +38,11 @@ const Products = (props) => {
 	};
 
 	const handleAddToCart = (e) => {
-		// let newCart = [];
-		// let isInCart = false;
-		let currItem = products[e.target.parentNode.parentNode.id - 1];
-		// for (const product of cart) {
-		// 	newCart.push(product);
-		// }
+
+		let currItem = products[e.target.id];
+
 		const addProductFunc = async () => {
 			const addProduct = await addProductToOrder(currItem, order);
-			//console.log(addProduct)
 		}
 		addProductFunc();
 
@@ -54,31 +50,7 @@ const Products = (props) => {
 			const products = await getAllProductsOnOrder(order.id);
 			setCart(products[0]);
 		}
-
 		setProductsToCart();
-		
-		// for (const product of newCart) {
-		// 	// eslint-disable-next-line
-		// 	if (
-		// 		product.name ==
-		// 		products[e.target.parentNode.parentNode.id - 1].name
-		// 	) {
-		// 		product.quantity++;
-		// 		isInCart = true;
-		// 	}
-		// }
-		// if (isInCart) {
-		// 	setCart(newCart);
-		// 	return;
-		// }
-		// let temp = {
-		// 	name: currItem.name,
-		// 	price: currItem.price,
-		// 	quantity: 1,
-		// 	id: currItem.id,
-		// };
-		// newCart.push(temp);
-		// setCart(newCart);
 	};
 
 	return (
@@ -99,6 +71,7 @@ const Products = (props) => {
 									/>
 								</Link>
 								<Button
+									id={index}
 									variant='contained'
 									onMouseEnter={handleMouseEnterButton}
 									onMouseLeave={handleMouseLeaveButton}
