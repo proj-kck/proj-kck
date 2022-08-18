@@ -14,7 +14,7 @@ const {
 
 usersRouter.get('/', async (req, res, next) => {
 	if (req.user) {
-		try {
+		try { //add in utils file
 			if (!req.user.is_admin) {
 				next({
 					name: 'Unauthorized',
@@ -26,8 +26,8 @@ usersRouter.get('/', async (req, res, next) => {
 					users,
 				});
 			}
-		} catch ({ name, message }) {
-			next({ name, message });
+		} catch ( error ) {
+			next( error );
 		}
 	} else {
 		next({

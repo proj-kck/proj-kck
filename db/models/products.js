@@ -23,7 +23,7 @@ async function getAllProducts() {
 
     return products;
   } catch (error) {
-    
+    throw error;
   }
 }
 

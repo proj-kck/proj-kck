@@ -2,8 +2,17 @@ const apiRouter = require('express').Router();
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { JWT_SECRET } = process.env;
+var session = require('express-session');
 
 const { users } = require('../db')
+
+apiRouter.use(
+  session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true,
+  }
+));
 
 apiRouter.use(async (req, res, next) => {
   const prefix = 'Bearer ';

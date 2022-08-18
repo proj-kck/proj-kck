@@ -6,7 +6,7 @@ const {
   product_orders
 } = require('./');
 
-const { beers, wines, spirits } = require('./seedData')
+const { beers, wines, spirits, initialUsers } = require('./seedData')
 
 async function buildTables() {
   try {
@@ -84,13 +84,9 @@ async function populateInitialData() {
     }
     
     console.log('Creating users...')
-    const user = await users.createUser({
-      username: 'admin', 
-      password: 'admin', 
-      email: 'admin@admin.com',
-      isAdmin: true
-    });
+    initialUsers.map(user => {users.createUser(user)})
 
+    const user = initialUsers[1]
     console.log('Creating dummy orders...');
     const orderTest = await orders.createOrder(user.id);
 

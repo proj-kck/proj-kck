@@ -5,15 +5,15 @@ import { getAllProducts } from '../axios-services';
 
 const Products = (props) => {
 	const [products, setProducts] = useState([]);
+	const category = props.category;
 
 	useEffect(() => {
 		async function getData() {
-			const category = props.category;
 			const data = await getAllProducts(category);
 			setProducts(data);
 		}
 		getData();
-	});
+	}, [category]);
 	const handleMouseEnter = (e) => {
 		e.target.parentNode.parentNode.parentNode.className +=
 			' hovered-product';
