@@ -11,6 +11,7 @@ const {
 	getUser,
 	getUserByEmail,
 } = require('../db/models/users');
+<<<<<<< HEAD
 
 usersRouter.get('/', async (req, res, next) => {
 	if (req.user) {
@@ -28,14 +29,21 @@ usersRouter.get('/', async (req, res, next) => {
 			}
 		} catch ( error ) {
 			next( error );
+=======
+const {requireAdmin} = require('./utils');
+usersRouter.get('/', requireAdmin, async (req, res, next) => {
+		try{
+			const users = await getAllUsers();
+			res.send({
+				users,
+			});
+			
+		} catch (error) {
+			next (error);
+>>>>>>> ce632e57290c4ad188cf52b9dc15370d6b2bfe75
 		}
-	} else {
-		next({
-			name: 'Unauthorized',
-			message: 'You are not authorized for this action.',
-		});
 	}
-});
+);	
 
 usersRouter.post('/login', async (req, res, next) => {
 	const { username, password } = req.body;

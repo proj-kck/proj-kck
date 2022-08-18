@@ -68,38 +68,28 @@ async function buildTables() {
 
 async function populateInitialData() {
   try {
-
     console.log('Creating products...')
-
     for (const beer of beers) {
       products.createProduct(beer);
     }
-
     for (const wine of wines){
       products.createProduct(wine);
     }
-
     for (const spirit of spirits){
       products.createProduct(spirit);
     }
-    
     console.log('Creating users...')
     initialUsers.map(user => {users.createUser(user)})
 
     const user = initialUsers[1]
+    initialUsers.map(user => {users.createUser(user)})
     console.log('Creating dummy orders...');
     const orderTest = await orders.createOrder(user.id);
-
-
     console.log('Creating dummy product_orders...');
-
     const productToOrder = await products.getProductById(7)
     const productToOrder2 = await products.getProductById(7)
-
     const p_orders = await product_orders.addProductToOrder(orderTest.id, productToOrder.id, productToOrder.price, 4);
     const p_orders2 = await product_orders.addProductToOrder(orderTest.id, productToOrder2.id, productToOrder2.price, 2);
-
-    
   } catch (error) {
     throw error;
   }
