@@ -2,8 +2,17 @@ const apiRouter = require('express').Router();
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { JWT_SECRET } = process.env;
+var session = require('express-session');
 
 const { users } = require('../db')
+
+apiRouter.use(
+  session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true,
+  }
+));
 
 apiRouter.use(async (req, res, next) => {
   const prefix = 'Bearer ';
@@ -51,6 +60,11 @@ apiRouter.use('/products', productsRouter);
 const usersRouter = require('./users');
 apiRouter.use('/users', usersRouter)
 
+const por = require('./product_orders')
+apiRouter.use('/product_orders', por);
+
+const orderRouter = require('./orders')
+apiRouter.use('/orders', orderRouter)
 apiRouter.use((error, req, res, next) => {
   res.send({
     name: error.name,

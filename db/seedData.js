@@ -207,7 +207,7 @@ const spirits = [
     img: 'https://image.harrods.com/the-dalmore-30-year-old-2021-edition-highland-single-malt-scotch-whisky-70cl_17520380_36832872_2048.jpg'},
 ]
 
-const users = [
+const initialUsers = [
     {
         username: 'JohnSnow',
         password: 'winteriscoming',
@@ -241,5 +241,5 @@ const users = [
 ]
 
 module.exports = {
-    beers, wines, spirits, users
+    beers, wines, spirits, initialUsers
 }
