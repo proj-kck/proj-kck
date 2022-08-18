@@ -7,6 +7,7 @@ const Products = (props) => {
 	const [products, setProducts] = useState([]);
 	const category = props.category;
 
+	const [cart, setCart] = [props.cart, props.setCart];
 	useEffect(() => {
 		async function getData() {
 			const data = await getAllProducts(category);
@@ -27,13 +28,43 @@ const Products = (props) => {
 	const handleMouseLeaveButton = (e) => {
 		e.target.parentNode.parentNode.className = '';
 	};
+	const handleAddToCart = (e) => {
+		let newCart = [];
+		let isInCart = false;
+		let currItem = products[e.target.parentNode.parentNode.id - 1];
+		for (const product of cart) {
+			newCart.push(product);
+		}
+		for (const product of newCart) {
+			// eslint-disable-next-line
+			if (
+				product.name ==
+				products[e.target.parentNode.parentNode.id - 1].name
+			) {
+				product.quantity++;
+				isInCart = true;
+			}
+		}
+		if (isInCart) {
+			setCart(newCart);
+			return;
+		}
+		let temp = {
+			name: currItem.name,
+			price: currItem.price,
+			quantity: 1,
+			id: currItem.id,
+		};
+		newCart.push(temp);
+		setCart(newCart);
+	};
 
 	return (
 		<div>
 			<ul className='product-list'>
 				{products.map((product, index) => {
 					return (
-						<li id={index}>
+						<li id={product.id} key={product.id}>
 							<div className='product'>
 								<Link to={`/products/id/${product.id}`}>
 									<img
@@ -49,6 +80,7 @@ const Products = (props) => {
 									variant='contained'
 									onMouseEnter={handleMouseEnterButton}
 									onMouseLeave={handleMouseLeaveButton}
+									onClick={handleAddToCart}
 								>
 									Add to cart
 								</Button>
