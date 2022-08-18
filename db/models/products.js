@@ -15,6 +15,39 @@ async function createProduct({name, description, price, category, img, quantity}
     }
 }
 
+async function deleteProduct(product_id){
+  try {
+    const { rows: [product] } = await client.query(`
+      DELETE * FROM products
+      WHERE product_id=${product_id}
+    `);
+
+    return product;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function updateProduct(product_id, fields = {}){
+  const setString = Object.keys(fields).map(
+    (key, index) => `"${ key }"=$${ index + 1 }`
+    ).join(', ');
+    if (setString.length === 0) {
+      return;
+    }
+    try {
+      const { rows: [product] } = await client.query(`
+      UPDATE products
+      SET ${ setString }
+      WHERE id=${ id }
+      RETURNING *;
+      `, Object.values(fields));
+      return product;
+    } catch (error) {
+      throw error;
+    }
+}
+
 async function getAllProducts() {
   try {
     const { rows: products } = await client.query(`
