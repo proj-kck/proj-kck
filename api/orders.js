@@ -23,12 +23,7 @@ ordersRouter.post('/:user_id', async (req, res, next) => {
         next(error);
     }
 });
-<<<<<<< HEAD
-
-ordersRouter.delete('/:orderId', async (req, res, next) => {
-=======
 ordersRouter.patch('/:orderId', async (req, res, next) => {
->>>>>>> ce632e57290c4ad188cf52b9dc15370d6b2bfe75
     try {
         const { orderId } = req.params;
         const order = await closeOrder(orderId);
@@ -39,9 +34,7 @@ ordersRouter.patch('/:orderId', async (req, res, next) => {
         next (error);
     }
 });
-<<<<<<< HEAD
 
-=======
 ordersRouter.get('/:orderId', async(req, res, next) => {
     try {
         const { orderId } = req.params;
@@ -53,7 +46,7 @@ ordersRouter.get('/:orderId', async(req, res, next) => {
        next (error);
     }
 })
->>>>>>> ce632e57290c4ad188cf52b9dc15370d6b2bfe75
+
 
 module.exports = ordersRouter;
 

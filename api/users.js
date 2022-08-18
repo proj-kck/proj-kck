@@ -11,25 +11,6 @@ const {
 	getUser,
 	getUserByEmail,
 } = require('../db/models/users');
-<<<<<<< HEAD
-
-usersRouter.get('/', async (req, res, next) => {
-	if (req.user) {
-		try { //add in utils file
-			if (!req.user.is_admin) {
-				next({
-					name: 'Unauthorized',
-					message: 'You are not authorized for this action.',
-				});
-			} else {
-				const users = await getAllUsers();
-				res.send({
-					users,
-				});
-			}
-		} catch ( error ) {
-			next( error );
-=======
 const {requireAdmin} = require('./utils');
 usersRouter.get('/', requireAdmin, async (req, res, next) => {
 		try{
@@ -40,7 +21,6 @@ usersRouter.get('/', requireAdmin, async (req, res, next) => {
 			
 		} catch (error) {
 			next (error);
->>>>>>> ce632e57290c4ad188cf52b9dc15370d6b2bfe75
 		}
 	}
 );	
