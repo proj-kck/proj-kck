@@ -11,4 +11,13 @@ app.use(
         resave: false,
         saveUninitialized: false
     })
-)
+);
+app.use((req, res, next) => {
+    console.log(`${req.method}:${req.url}`);
+    next();
+});
+// app.use('/api/carts', cartsRouter)
+app.get("/", (req, res) => {
+    console.log(req.session);
+    console.log('the actual session id: ', req.sessionID)
+})

@@ -43,7 +43,7 @@ router.get('/:productId', async (req, res, next) => {
         throw error;
     }
 })
-
+//Admin delete
 // router.delete('./:category', async (req, res, next) => {
 //     try {
 //         const {productId} = req.params;
