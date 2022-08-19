@@ -24,6 +24,7 @@ const Login = (props) => {
 				alert('Username or password incorrect');
 			} else {
 				localStorage.setItem('token', token);
+				localStorage.setItem('username', username)
 				props.setLoggedInUser(user);
 				console.log(resp);
 				navigate('/products');

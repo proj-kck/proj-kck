@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
-import { getAllProducts } from '../axios-services';
+import { addProductToOrder, getAllProducts } from '../axios-services';
+import { successMsg } from '.';
+
+
 
 const Products = (props) => {
 	const [products, setProducts] = useState([]);
 	const category = props.category;
 
-	const [cart, setCart] = [props.cart, props.setCart];
+	const order = props.order;
+
 	useEffect(() => {
 		async function getData() {
 			const data = await getAllProducts(category);
@@ -15,48 +19,32 @@ const Products = (props) => {
 		}
 		getData();
 	}, [category]);
+
 	const handleMouseEnter = (e) => {
 		e.target.parentNode.parentNode.parentNode.className +=
 			' hovered-product';
 	};
+
 	const handleMouseLeave = (e) => {
 		e.target.parentNode.parentNode.parentNode.className = '';
 	};
+
 	const handleMouseEnterButton = (e) => {
 		e.target.parentNode.parentNode.className += ' hovered-product';
 	};
+
 	const handleMouseLeaveButton = (e) => {
 		e.target.parentNode.parentNode.className = '';
 	};
+
 	const handleAddToCart = (e) => {
-		let newCart = [];
-		let isInCart = false;
-		let currItem = products[e.target.parentNode.parentNode.id - 1];
-		for (const product of cart) {
-			newCart.push(product);
-		}
-		for (const product of newCart) {
-			// eslint-disable-next-line
-			if (
-				product.name ==
-				products[e.target.parentNode.parentNode.id - 1].name
-			) {
-				product.quantity++;
-				isInCart = true;
-			}
-		}
-		if (isInCart) {
-			setCart(newCart);
-			return;
-		}
-		let temp = {
-			name: currItem.name,
-			price: currItem.price,
-			quantity: 1,
-			id: currItem.id,
-		};
-		newCart.push(temp);
-		setCart(newCart);
+		let currItem = products[e.target.id];
+
+		addProductToOrder(currItem, order)
+		.then(res => {
+			successMsg('Product added to cart.')
+		});
+
 	};
 
 	return (
@@ -77,6 +65,7 @@ const Products = (props) => {
 									/>
 								</Link>
 								<Button
+									id={index}
 									variant='contained'
 									onMouseEnter={handleMouseEnterButton}
 									onMouseLeave={handleMouseLeaveButton}

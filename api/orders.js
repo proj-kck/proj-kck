@@ -1,15 +1,23 @@
 const express = require('express');
 const ordersRouter = express.Router();
 
-const {createOrder, closeOrder, orderStatus, getOrderStatus } = require('../db/models/orders')
+const {createOrder, closeOrder, getOrderStatus, getOpenOrder } = require('../db/models/orders')
 
 const jwt = require('jsonwebtoken');
 
-ordersRouter.post('/:user_id', async (req, res, next) => {
-    const { user_id } = req.params;
+ordersRouter.post('/', async (req, res, next) => {
     try {
-        //require user to be logged in
-        const order = await createOrder(user_id);
+        let order = await getOpenOrder(req.user.id);
+        if (!order){
+            order = await createOrder(req.user.id)
+        }
+
+        // if (!req.user.order) {
+        //     order = await createOrder(req.user.user_id);
+        //     req.user.order = order;
+        // } else {
+        //     res.send(req.user.order)
+        // }
 
         if (order) {
             res.send(order);
@@ -23,6 +31,7 @@ ordersRouter.post('/:user_id', async (req, res, next) => {
         next(error);
     }
 });
+
 ordersRouter.patch('/:orderId', async (req, res, next) => {
     try {
         const { orderId } = req.params;
@@ -46,7 +55,6 @@ ordersRouter.get('/:orderId', async(req, res, next) => {
        next (error);
     }
 })
-
 
 module.exports = ordersRouter;
 
