@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState} from 'react';
 
 const CreatingProd = () => {
     const [name, setName] = useState(''); 
