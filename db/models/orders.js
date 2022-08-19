@@ -14,6 +14,18 @@ async function createOrder(user_id){
     }
 }
 
+async function getOpenOrder(user_id){
+    try {
+        const { rows: [order] } = await client.query(`
+            SELECT * FROM orders
+            WHERE user_id=${user_id}
+        `);
+        return order;
+    } catch (error) {
+        throw error;
+    }
+}
+
 async function closeOrder(orders_id){
     try {
         const { rows: [order] } = await client.query(`
@@ -46,5 +58,6 @@ async function getOrderStatus(orders_id) {
 module.exports = {
     createOrder,
     closeOrder,
-    getOrderStatus
+    getOrderStatus,
+    getOpenOrder
 }
