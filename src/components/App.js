@@ -6,9 +6,6 @@ import Home from './Home';
 import Products from './Products';
 import { getAllProductsOnOrder } from '../axios-services';
 
-// getAPIHealth is defined in our axios-services directory index.js
-// you can think of that directory as a collection of api adapters
-// where each adapter fetches specific info from our express server's /api route
 import { getAPIHealth, initiateOrder } from '../axios-services';
 import '../style/App.css';
 import SingleProductView from './SingleProductView';
@@ -37,27 +34,16 @@ const App = () => {
 			});
 		}
 
-		async function getOrder(){
-			const currOrder = await initiateOrder(localStorage.token);
-			setOrder(currOrder);
-		}
+		
 		if (loggedInUser){
-			getOrder();
+			initiateOrder(localStorage.token)
+			.then(res => {
+				setOrder(res)
+			})
 		}
 
 		
 	}, []);
-
-	useEffect(() => {
-		const setProductsToCart = async () => {
-			const products = await getAllProductsOnOrder(order.id);
-			setCart(products[0]);
-		}
-		
-		if (order){
-			setProductsToCart();	
-		}
-	}, [order])
 
 	return (
 		<div className='app-container'>

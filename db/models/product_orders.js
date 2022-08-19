@@ -33,14 +33,12 @@ async function addProductToOrder(orders_id, product_id, product_name, price_at_p
 async function removeProductFromOrder(orders_id, product_id){
     try {
         ///make sure order already contains this product
-        console.log(orders_id, product_id)
         const { rows: [p_order] } = await client.query(`
             SELECT * 
             FROM product_orders
             WHERE orders_id=${orders_id}
             AND product_id=${product_id}
         `);
-        console.log(p_order)
 
         //if it does, remove quantity
         if (p_order && p_order.quantity_order > 1) {

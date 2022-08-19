@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useState } from 'react';
 // import { ConstructionOutlined } from '@mui/icons-material';
 import { getAllProductsOnOrder, removeProductFromOrder } from '../axios-services';
 
@@ -10,26 +9,24 @@ const Cart = (props) => {
 	const cart = props.cart;
 	const setCart = props.setCart;
 
-	const setProductsToCart = async () => {
-		const products = await getAllProductsOnOrder(order.id);
-		setCart(products[0]);
-	}
-	
-
 	const handleDelete = (e, id) => {
-		const removeProduct = async () => {
-			const delProduct = await removeProductFromOrder(order, id);
-		} 
 		
-		removeProduct();
-
-		setProductsToCart();
-
+		removeProductFromOrder(order, id)
+		.then(res => {
+			console.log(res)
+			getAllProductsOnOrder(order.id)
+			.then(res => {
+				setCart(res)
+			})})
+		
 	};
 
 	useEffect(() => {
-		setProductsToCart();
-	}, [cart]);
+		getAllProductsOnOrder(order.id)
+		.then(res => {
+			setCart(res)
+		})
+	}, []);
 
 	return (
 		<div className='cart-area'>

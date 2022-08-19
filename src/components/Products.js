@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
-import { addProductToOrder, getAllProducts, getAllProductsOnOrder } from '../axios-services';
+import { addProductToOrder, getAllProducts } from '../axios-services';
+import { successMsg } from '.';
+
 
 
 const Products = (props) => {
 	const [products, setProducts] = useState([]);
 	const category = props.category;
-	const cart = props.cart;
-	const setCart = props.setCart;
 
 	const order = props.order;
 
@@ -38,19 +38,13 @@ const Products = (props) => {
 	};
 
 	const handleAddToCart = (e) => {
-
 		let currItem = products[e.target.id];
 
-		const addProductFunc = async () => {
-			const addProduct = await addProductToOrder(currItem, order);
-		}
-		addProductFunc();
+		addProductToOrder(currItem, order)
+		.then(res => {
+			successMsg('Product added to cart.')
+		});
 
-		const setProductsToCart = async () => {
-			const products = await getAllProductsOnOrder(order.id);
-			setCart(products[0]);
-		}
-		setProductsToCart();
 	};
 
 	return (

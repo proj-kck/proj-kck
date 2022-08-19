@@ -25,7 +25,7 @@ export async function getAllProductsOnOrder(orders_id){
 		const { data } = await axios.get(`/api/product_orders/${orders_id}`);
 		
 
-		return [data];
+		return data;
 	} catch (error) {
 		throw error;
 	}
