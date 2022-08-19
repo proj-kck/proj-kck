@@ -26,12 +26,25 @@ const CreatingProd = () => {
         <div>
         <h3>Create a product:</h3>
             <form onSubmit={submitHandler}>
+            <div>Name:</div> 
                 <input type="text" placeholder="name" value={name} onChange= {(evt) => setName(evt.target.value)}></input>
+                <br/> 
+                <div>Description:</div>
                 <input type="text" placeholder="description" value={description} onChange={(evt) => setDescription(evt.target.value)}></input>
+                <br/> 
+                <div>Price:</div>
                 <input type="text" placeholder="price" value={price} onChange={(evt) => setPrice(evt.target.value)}></input>
+                <br/> 
+                <div>Category:</div>
                 <input type="text" placeholder="category" value={category} onChange={(evt) => setCategory(evt.target.value)}></input>
+                <br/> 
+                <div>Image URL:</div>
                 <input type="text" placeholder="image url" value={img} onChange={(evt) => setImg(evt.target.value)}></input>
-                <input type="text" placeholder="stock/quantity" value={stock} onChange={(evt) => setStock(evt.target.value)}></input>              
+                <br/> 
+                <div>Stock:</div>
+                <input type="text" placeholder="stock/quantity" value={stock} onChange={(evt) => setStock(evt.target.value)}></input>  
+                <br/>
+                <br/>              
                 <button type="submit" className="btn-outline-primary">Create</button>
             </form>
         </div>
