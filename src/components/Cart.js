@@ -2,30 +2,48 @@ import React, { useEffect } from 'react';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 // import { ConstructionOutlined } from '@mui/icons-material';
-import { getAllProductsOnOrder, removeProductFromOrder } from '../axios-services';
+import { getAllProductsOnOrder, getAllProductsOnOrderGuest, removeProductFromOrder } from '../axios-services';
 
 const Cart = (props) => {
 	const order = props.order;
 	const cart = props.cart;
 	const setCart = props.setCart;
+	const token = props.token;
 
 	const handleDelete = (e, id) => {
 		
-		removeProductFromOrder(order, id)
-		.then(res => {
-			console.log(res)
-			getAllProductsOnOrder(order.id)
+		if (token) {
+			removeProductFromOrder(order, id)
 			.then(res => {
-				setCart(res)
+				getAllProductsOnOrder(order.id)
+				.then(res => {
+					setCart(res)
 			})})
+		} else {
+			removeProductFromOrderGuest(id)
+			.then(res => {
+				getAllProductsOnOrderGuest()
+				.then(res => {
+					setCart(res)
+			})})
+		}
+		
 		
 	};
 
 	useEffect(() => {
-		getAllProductsOnOrder(order.id)
-		.then(res => {
-			setCart(res)
-		})
+		if (token){
+			getAllProductsOnOrder(order.id)
+			.then(res => {
+				setCart(res)
+			})
+		} else {
+			getAllProductsOnOrderGuest()
+			.then(res => {
+				setCart(res)
+			})
+		}
+		console.log(cart)
 	}, []);
 
 	return (

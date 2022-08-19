@@ -1,3 +1,4 @@
+import { ErrorSharp } from '@mui/icons-material';
 import axios from 'axios';
 
 export async function getAPIHealth() {
@@ -20,18 +21,34 @@ export async function initiateOrder(token){
 	}
 }
 
+export async function initiateGuestCart(){
+	try {
+		const { data } = await axios.post('/api/guest');
+		return data;
+	} catch (error) {
+		throw error;
+	}
+} 
+
 export async function getAllProductsOnOrder(orders_id){
 	try {
 		const { data } = await axios.get(`/api/product_orders/${orders_id}`);
-		
-
 		return data;
 	} catch (error) {
 		throw error;
 	}
 }
 
-export async function addProductToOrder(product, order){
+export async function getAllProductsOnOrderGuest(){
+	try {
+		const { data } = await axios.get('/api/guest/items');
+		return data;
+	} catch (error) {
+		throw error;
+	}
+}
+
+export async function addProductToOrder(product, order, token){
 	try {
 		const postData = {
 			orders_id: order.id,
@@ -40,8 +57,17 @@ export async function addProductToOrder(product, order){
 			price_at_purchase: product.price,
 			quantity_order: 1
 		}
-
+		axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 		const { data } = await axios.post(`/api/product_orders/add`, postData);
+		return data;
+	} catch (error) {
+		throw error;
+	}
+}
+
+export async function addProductToOrderGuest(product){
+	try {
+		const { data } = await axios.post('/api/guest/items', {item: product, quantity: 1})
 		return data;
 	} catch (error) {
 		throw error;
@@ -56,6 +82,15 @@ export async function removeProductFromOrder(order, product_id){
 		}
 	
 		const { data } = await axios.delete('/api/product_orders/remove', {data: postData})
+		return data;
+	} catch (error) {
+		throw error;
+	}
+}
+
+export async function removeProductFromOrderGuest(product_id){
+	try {
+		const { data } = await axios.delete('/api/guest/items', {product_id})
 		return data;
 	} catch (error) {
 		throw error;
