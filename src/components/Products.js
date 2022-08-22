@@ -14,11 +14,13 @@ const Products = (props) => {
 	const order = props.order;
 
 	useEffect(() => {
-		async function getData() {
-			const data = await getAllProducts(category);
-			setProducts(data);
-		}
-		getData();
+		// async function getData() {
+			getAllProducts(category)
+			.then(res => {
+				setProducts(res)
+			});
+		// }
+		// getData();
 	}, [category]);
 
 	const handleMouseEnter = (e) => {
