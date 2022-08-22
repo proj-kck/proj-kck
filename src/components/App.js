@@ -4,9 +4,18 @@ import Login from './Login';
 import Register from './Register';
 import Home from './Home';
 import Products from './Products';
+import Admin from './Admin';
+import Users from './Users';
+import CreateProdAdmin from './CreateProdAdmin';
+import EditProdAdmin from './EditProdAdmin';
+
 import { getAllProductsOnOrder, initiateGuestCart } from '../axios-services';
 
-import { getAPIHealth, initiateOrder } from '../axios-services';
+
+// getAPIHealth is defined in our axios-services directory index.js
+// you can think of that directory as a collection of api adapters
+// where each adapter fetches specific info from our express server's /api route
+import { getAPIHealth } from '../axios-services';
 import '../style/App.css';
 import SingleProductView from './SingleProductView';
 import Cart from './Cart';
@@ -16,15 +25,19 @@ const App = () => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [loggedInUser, setLoggedInUser] = useState({});
-	const [order, setOrder] = useState({});
 	const [cart, setCart] = useState([]);
 
 	useEffect(() => {
+		// follow this pattern inside your useEffect calls:
+		// first, create an async function that will wrap your axios service adapter
+		// invoke the adapter, await the response, and set the data
 		const getAPIStatus = async () => {
 			const { healthy } = await getAPIHealth();
 			setAPIHealth(healthy ? 'api is up! :D' : 'api is down :/');
 		};
 
+		// second, after you've defined your getter above
+		// invoke it immediately after its declaration, inside the useEffect callback
 		getAPIStatus();
 
 		if (localStorage.token && localStorage.username) {
@@ -33,16 +46,15 @@ const App = () => {
 				username: localStorage.username,
 			});
 			initiateOrder(localStorage.token)
-			.then(res => {
-				setOrder(res)
-			})
-		} else {
-			initiateGuestCart()
-			.then(res => {
-				setOrder(res)
-			})
-		}
-		
+				.then(res => {
+					setOrder(res)
+				})
+			} else {
+				initiateGuestCart()
+				.then(res => {
+					setOrder(res)
+				})
+			}		
 	}, []);
 
 	return (
@@ -68,6 +80,9 @@ const App = () => {
 						<Link className='link' to='/products'>
 							Products
 						</Link>
+						<Link className='link' to='/admin'>
+							Admin
+						</Link>
 						<Link className='link' to='/login'>
 							Login/Logout
 						</Link>
@@ -91,6 +106,18 @@ const App = () => {
 						<Route path='/home' element={<Home />} />
 						<Route
 							path='/products'
+							element={<Products cart={cart} setCart={setCart} />}
+						/>
+						<Route
+							path='/products/beer'
+							element={<Products category='beer' />}
+						/>
+						<Route
+							path='/products/wine'
+							element={<Products category='wine' />}
+						/>
+						<Route
+							path='/products/spirits'
 							element={<Products order={order} setOrder={setOrder} cart={cart} setCart={setCart} token={loggedInUser.token}/>}
 						/>
 						<Route
@@ -103,8 +130,7 @@ const App = () => {
 						/>
 						<Route
 							path='/products/spirits'
-							element={<Products order={order} setOrder={setOrder} cart={cart} setCart={setCart} token={loggedInUser.token} category='spirits' />}
-						/>
+							element={<Products order={order} setOrder={setOrder} cart={cart} setCart={setCart} token={loggedInUser.token} category='spirits' />}/>
 						<Route
 							path='/register'
 							element={
@@ -126,6 +152,16 @@ const App = () => {
 							path='/cart'
 							element={<Cart order={order} cart={cart} setCart={setCart} token={loggedInUser.token}/>}
 						></Route>
+						<Route path='/admin' element={<Admin />} />
+						<Route
+							path='/admin/viewusers'
+							element={<Users token={loggedInUser.token}/>} />
+						<Route
+							path='/admin/createnewproduct'
+							element={<CreateProdAdmin />} />
+						<Route
+							path='/admin/editproduct'
+							element={<EditProdAdmin />} />
 					</Routes>
 				</div>
 			</Router>
@@ -135,5 +171,4 @@ const App = () => {
 		</div>
 	);
 };
-
 export default App;
