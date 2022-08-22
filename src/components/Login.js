@@ -26,7 +26,6 @@ const Login = (props) => {
 				localStorage.setItem('token', token);
 				localStorage.setItem('username', username)
 				props.setLoggedInUser(user);
-				console.log(resp);
 				navigate('/products');
 			}
 			setPassword('');

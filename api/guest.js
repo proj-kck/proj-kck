@@ -4,7 +4,7 @@ const guestRouter = express.Router();
 guestRouter.post('/', async (req, res, next) => {
     const { cart } = req.session;
     if (!cart) {
-        req.session.cart = {};
+        req.session.cart = {items: []};
         res.send(cart)
     } else {
         res.send(cart)
@@ -14,7 +14,7 @@ guestRouter.post('/', async (req, res, next) => {
 guestRouter.get("/items", (req, res, next) => {
     const { cart } = req.session;
     if (!cart) {
-        res.send("No items to display")
+        res.send({items: []})
     } else {
         res.send(cart)
     }
@@ -30,16 +30,14 @@ guestRouter.post('/end', async (req, res, next) => {
 })
 
 guestRouter.post("/items", (req, res, next) => {
-    const { product_id, name, price_at_purchase } = req.body; 
-    console.log('This is item: ', product_id, name)
-    const cartItem = { product_id, name, price_at_purchase, quantity: 1 };
+    const { product_id, product_name, price_at_purchase } = req.body; 
+    const cartItem = { product_id, product_name, price_at_purchase, quantity_order: 1 };
     const { cart } = req.session
     if (cart) {
         const { items } = cart;
-        let doesExist = false;
         for (const item of items){
             if (item.product_id === cartItem.product_id){
-                item.quantity += 1;
+                item.quantity_order += 1;
                 res.send(200);
                 return;
             }
@@ -60,14 +58,14 @@ guestRouter.delete('/items', async (req, res, next) => {
         const { items } = req.session.cart;
         for (let i = 0; i < items.length; i++) {
             if (items[i].product_id === product_id) {
-                if (items[i].quantity > 1) {
-                    items[i].quantity -= 1;
+                if (items[i].quantity_order > 1) {
+                    items[i].quantity_order -= 1;
                 } else {
-                    items.delete()
+                    items.splice(i, 1);
                 }
             }
         }
-        res.send(items[0]);
+        res.send(items);
     } catch (error) {
         next(error)
     }

@@ -61,7 +61,7 @@ const App = () => {
 							</Link>
 						</div>
 					</div>
-					<navbar>
+					<nav>
 						<Link className='link' to='/home'>
 							Home
 						</Link>
@@ -71,7 +71,7 @@ const App = () => {
 						<Link className='link' to='/login'>
 							Login/Logout
 						</Link>
-					</navbar>
+					</nav>
 				</div>
 				<div className='main'>
 					<Routes>

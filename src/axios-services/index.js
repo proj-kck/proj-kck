@@ -42,7 +42,7 @@ export async function getAllProductsOnOrder(orders_id){
 export async function getAllProductsOnOrderGuest(){
 	try {
 		const { data } = await axios.get('/api/guest/items');
-		return data;
+		return data.items;
 	} catch (error) {
 		throw error;
 	}
@@ -67,7 +67,12 @@ export async function addProductToOrder(product, order, token){
 
 export async function addProductToOrderGuest(product){
 	try {
-		const { data } = await axios.post('/api/guest/items', {item: product, quantity: 1})
+		const postData = {
+			product_id: product.id, 
+			product_name: product.name, 
+			price_at_purchase: product.price
+		}
+		const { data } = await axios.post('/api/guest/items', postData)
 		return data;
 	} catch (error) {
 		throw error;
@@ -90,7 +95,11 @@ export async function removeProductFromOrder(order, product_id){
 
 export async function removeProductFromOrderGuest(product_id){
 	try {
-		const { data } = await axios.delete('/api/guest/items', {product_id})
+		const postData = {
+			product_id
+		}
+
+		const { data } = await axios.delete('/api/guest/items', {data: postData})
 		return data;
 	} catch (error) {
 		throw error;

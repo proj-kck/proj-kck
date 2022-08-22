@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 // import { ConstructionOutlined } from '@mui/icons-material';
-import { getAllProductsOnOrder, getAllProductsOnOrderGuest, removeProductFromOrder } from '../axios-services';
+import { getAllProductsOnOrder, getAllProductsOnOrderGuest, removeProductFromOrder, removeProductFromOrderGuest } from '../axios-services';
 
 const Cart = (props) => {
 	const order = props.order;
@@ -11,7 +11,6 @@ const Cart = (props) => {
 	const token = props.token;
 
 	const handleDelete = (e, id) => {
-		
 		if (token) {
 			removeProductFromOrder(order, id)
 			.then(res => {
@@ -25,14 +24,13 @@ const Cart = (props) => {
 				getAllProductsOnOrderGuest()
 				.then(res => {
 					setCart(res)
-			})})
+				})
+			})
 		}
-		
-		
 	};
 
 	useEffect(() => {
-		if (token){
+		if (token) {
 			getAllProductsOnOrder(order.id)
 			.then(res => {
 				setCart(res)
@@ -42,8 +40,7 @@ const Cart = (props) => {
 			.then(res => {
 				setCart(res)
 			})
-		}
-		console.log(cart)
+		}	
 	}, []);
 
 	return (
