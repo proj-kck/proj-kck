@@ -81,7 +81,10 @@ async function populateInitialData() {
       await products.createProduct(spirit);
     }
     console.log('Creating users...')
-     initialUsers.map(user => {users.createUser(user)})
+    for (const user of initialUsers){
+      await users.createUser(user);
+    }
+    
 
     // // const user = initialUsers[1]
     // initialUsers.map(user => {users.createUser(user)})
