@@ -2,7 +2,6 @@
 //product_orders req 
 
 function requireAdmin(req, res, next){
-    
     if (!req.user){
         next({
             name: 'Unauthorized',

@@ -19,12 +19,19 @@ usersRouter.get('/', requireAdmin, async (req, res, next) => {
 			res.send({
 				users,
 			});
-			
 		} catch (error) {
 			next (error);
 		}
 	}
 );	
+
+usersRouter.get('/admin', requireAdmin, async (req, res, next) => {
+	try {
+		res.send('User is an authorized admin')
+	} catch (error) {
+		next (error)
+	}
+})
 
 usersRouter.post('/login', async (req, res, next) => {
 	const { username, password } = req.body;

@@ -198,3 +198,13 @@ export async function editProduct(token, id, name, description, price, category,
 		throw error;
 	}
 }
+
+export async function isTokenAdmin(token) {
+	try {
+		axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+		const { data } = await axios.get(`/api/users/admin`);
+		return data;
+	} catch (error) {
+		throw error;
+	}
+}
