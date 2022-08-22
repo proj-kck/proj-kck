@@ -53,7 +53,7 @@ const App = () => {
 						<h1>KC Liqours</h1>
 						<div>
 							<h2 className='white'>
-								Hello {loggedInUser.username}!
+								Hello {loggedInUser.username ? loggedInUser.username : 'Guest'}!
 							</h2>
 
 							<Link to='/cart'>
