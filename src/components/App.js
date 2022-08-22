@@ -132,13 +132,13 @@ const App = () => {
 						<Route path='/admin' element={<Admin />} />
 						<Route
 							path='/admin/viewusers'
-							element={<Users category='viewusers' />} />
+							element={<Users token={loggedInUser.token}/>} />
 						<Route
 							path='/admin/createnewproduct'
-							element={<CreateProdAdmin category='createnewproduct' />} />
+							element={<CreateProdAdmin />} />
 						<Route
 							path='/admin/editproduct'
-							element={<EditProdAdmin category='editproduct' />} />
+							element={<EditProdAdmin />} />
 					</Routes>
 				</div>
 			</Router>
