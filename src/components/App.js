@@ -145,7 +145,7 @@ const App = () => {
 							}
 						></Route>
 						<Route
-							path='/products/id/:id'
+							path='/products/:id'
 							element={<SingleProductView />}
 						></Route>
 						<Route
@@ -158,10 +158,13 @@ const App = () => {
 							element={<Users token={loggedInUser.token}/>} />
 						<Route
 							path='/admin/createnewproduct'
-							element={<CreateProdAdmin />} />
+							element={<CreateProdAdmin token={loggedInUser.token}/>} />
 						<Route
 							path='/admin/editproduct'
-							element={<EditProdAdmin />} />
+							element={<EditProdAdmin token={loggedInUser.token}/>} />
+						<Route
+							path='/admin/editproduct/:id'
+							element={<SingleProductView edit={true} token={loggedInUser.token}/>} />
 					</Routes>
 				</div>
 			</Router>

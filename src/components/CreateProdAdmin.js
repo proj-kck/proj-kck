@@ -1,51 +1,93 @@
 import React, {useState} from 'react';
+import { TextField, Button, InputLabel, Select, MenuItem } from '@mui/material';
+import { createProduct } from '../axios-services';
+import { useNavigate } from 'react-router-dom';
 
-const CreatingProd = () => {
+const CreatingProd = (props) => {
     const [name, setName] = useState(''); 
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
     const [category, setCategory] = useState('');
     const [img, setImg] = useState('');
     const [stock, setStock] = useState('');
+    const navigate = useNavigate();
+    const token = props.token;
 
     const submitHandler = async (evt) => {
         evt.preventDefault();
         try {
-            // let response = await ();
-
-            setName('');
-            setDescription('');
-            setPrice('');
-            setCategory('');
-            setImg('');
-            setStock('');
-        } catch (error) {}
+            createProduct(token, name, description, price, category, img, stock)
+            .then(navigate('/admin'))
+        } catch (error) {
+            throw error;
+        }
     };
 
     return (
         <div>
-        <h3>Create a product:</h3>
+            <br/>
+        <h3 style={{textAlign: 'center'}}>Create a product:</h3>
             <form onSubmit={submitHandler}>
-            <div>Name:</div> 
-                <input type="text" placeholder="name" value={name} onChange= {(evt) => setName(evt.target.value)}></input>
+                <TextField
+					id='outlined-required'
+					label='Name'
+					variant='outlined'
+					value={name}
+					onChange={(evt) => setName(evt.target.value)}
+                />
                 <br/> 
-                <div>Description:</div>
-                <input type="text" placeholder="description" value={description} onChange={(evt) => setDescription(evt.target.value)}></input>
+                <TextField
+					id='outlined-required'
+					label='Description'
+					variant='outlined'
+					value={description}
+					onChange={(evt) => setDescription(evt.target.value)}
+                />
                 <br/> 
-                <div>Price:</div>
-                <input type="text" placeholder="price" value={price} onChange={(evt) => setPrice(evt.target.value)}></input>
+                <TextField
+					id='outlined-required'
+					label='Price'
+					variant='outlined'
+					value={price}
+					onChange={(evt) => setPrice(evt.target.value)}
+                />
                 <br/> 
-                <div>Category:</div>
-                <input type="text" placeholder="category" value={category} onChange={(evt) => setCategory(evt.target.value)}></input>
+                <InputLabel id="outlined-required">Category</InputLabel>
+                <Select
+                    labelId="category-select"
+                    id="outline-required"
+                    value={category}
+                    label="Category"
+                    onChange={(evt) => setCategory(evt.target.value)}
+                >
+                <MenuItem value={'beer'}>Beer</MenuItem>
+                <MenuItem value={'wine'}>Wine</MenuItem>
+                <MenuItem value={'spirit'}>Spirit</MenuItem>
+                </Select>
                 <br/> 
-                <div>Image URL:</div>
-                <input type="text" placeholder="image url" value={img} onChange={(evt) => setImg(evt.target.value)}></input>
+                <TextField
+					id='outlined-required'
+					label='Image Url'
+					variant='outlined'
+					value={img}
+					onChange={(evt) => setImg(evt.target.value)}
+                />
                 <br/> 
-                <div>Stock:</div>
-                <input type="text" placeholder="stock/quantity" value={stock} onChange={(evt) => setStock(evt.target.value)}></input>  
-                <br/>
-                <br/>              
-                <button type="submit" className="btn-outline-primary">Create</button>
+                <TextField
+					id='outlined-required'
+					label='Stock/Quantity'
+					variant='outlined'
+					value={stock}
+					onChange={(evt) => setStock(evt.target.value)}
+                />
+                <br/>   
+                <Button
+					variant='contained'
+					onClick={submitHandler}
+					type='submit'
+					>
+						Add Product
+					</Button>           
             </form>
         </div>
     )

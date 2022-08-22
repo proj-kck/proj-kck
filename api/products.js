@@ -45,12 +45,20 @@ router.get('/:productId', async (req, res, next) => {
     }
 })
 
+router.post('/add', requireAdmin, async (req, res, next) => {
+    try {
+        const {name, description, price, category, img, quantity} = req.body;
+        const newProduct = await products.createProduct({name, description, price, category, img, quantity});
+        res.send(newProduct);
+    } catch (error) {
+        next (error);
+    }
+})
+
 router.patch('/:productId', requireAdmin, async (req, res, next) => {
     try {
-        console.log(req.body)
         const {productId} = req.params;
         const {name, description, price, category, img, quantity} = req.body;
-        console.log(productId)
         const updateFields = {}
         if (name) {updateFields.name= name};
         if (description) {updateFields.description= description};
@@ -65,7 +73,7 @@ router.patch('/:productId', requireAdmin, async (req, res, next) => {
     }
 })
 
-router.delete('/:productId', requireAdmin,async (req, res, next) => {
+router.delete('/:productId', requireAdmin, async (req, res, next) => {
     try {
         const {productId} = req.params;
         const product = await products.deleteProduct(productId);
