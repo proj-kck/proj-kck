@@ -26,6 +26,7 @@ const App = () => {
 	const [password, setPassword] = useState('');
 	const [loggedInUser, setLoggedInUser] = useState({});
 	const [cart, setCart] = useState([]);
+	const [order, setOrder] = useState();
 
 	useEffect(() => {
 		// follow this pattern inside your useEffect calls:

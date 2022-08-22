@@ -11,16 +11,6 @@ export async function getAPIHealth() {
 	}
 }
 
-export async function getAllUsers(){
-	try {
-		axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-		const { data } = await axios.get('/api/users');
-		return data;
-	} catch (error) {
-		throw error;
-	}
-}
-
 export async function initiateOrder(token){
 	try {
 		axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
@@ -172,7 +162,7 @@ export async function getAllUsers(token){
 			},
 		  })
 		  console.log(data, "yeeeees")
-		return data;
+		return data.users;
 	} catch (error) {
 		throw error;
 	}
