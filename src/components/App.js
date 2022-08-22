@@ -9,8 +9,7 @@ import Users from './Users';
 import CreateProdAdmin from './CreateProdAdmin';
 import EditProdAdmin from './EditProdAdmin';
 
-import { getAllProductsOnOrder, initiateGuestCart } from '../axios-services';
-
+import { getAllProductsOnOrder, initiateGuestCart, initiateOrder } from '../axios-services';
 
 // getAPIHealth is defined in our axios-services directory index.js
 // you can think of that directory as a collection of api adapters
