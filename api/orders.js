@@ -4,20 +4,16 @@ const ordersRouter = express.Router();
 const {createOrder, closeOrder, getOrderStatus, getOpenOrder } = require('../db/models/orders')
 
 const jwt = require('jsonwebtoken');
+const { TrendingUpTwoTone } = require('@mui/icons-material');
+const { requireUser } = require('./utils')
 
-ordersRouter.post('/', async (req, res, next) => {
+ordersRouter.post('/', requireUser, async (req, res, next) => {
     try {
+        //if logged in user
         let order = await getOpenOrder(req.user.id);
         if (!order){
             order = await createOrder(req.user.id)
         }
-
-        // if (!req.user.order) {
-        //     order = await createOrder(req.user.user_id);
-        //     req.user.order = order;
-        // } else {
-        //     res.send(req.user.order)
-        // }
 
         if (order) {
             res.send(order);

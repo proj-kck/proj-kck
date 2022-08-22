@@ -67,8 +67,6 @@ async function getAllProductsOnOrder(orders_id) {
             WHERE orders_id=$1
         `, [orders_id]);
 
-
-        // console.log(products_on_order)
         return products_on_order;
     } catch (error) {
         throw error;

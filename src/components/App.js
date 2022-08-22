@@ -9,6 +9,9 @@ import Users from './Users';
 import CreateProdAdmin from './CreateProdAdmin';
 import EditProdAdmin from './EditProdAdmin';
 
+import { getAllProductsOnOrder, initiateGuestCart } from '../axios-services';
+
+
 // getAPIHealth is defined in our axios-services directory index.js
 // you can think of that directory as a collection of api adapters
 // where each adapter fetches specific info from our express server's /api route
@@ -42,7 +45,16 @@ const App = () => {
 				token: localStorage.token,
 				username: localStorage.username,
 			});
-		}
+			initiateOrder(localStorage.token)
+				.then(res => {
+					setOrder(res)
+				})
+			} else {
+				initiateGuestCart()
+				.then(res => {
+					setOrder(res)
+				})
+			}		
 	}, []);
 
 	return (
@@ -53,7 +65,7 @@ const App = () => {
 						<h1>KC Liqours</h1>
 						<div>
 							<h2 className='white'>
-								Hello {loggedInUser.username}!
+								Hello {loggedInUser.username ? loggedInUser.username : 'Guest'}!
 							</h2>
 
 							<Link to='/cart'>
@@ -61,7 +73,7 @@ const App = () => {
 							</Link>
 						</div>
 					</div>
-					<navbar>
+					<nav>
 						<Link className='link' to='/home'>
 							Home
 						</Link>
@@ -74,7 +86,7 @@ const App = () => {
 						<Link className='link' to='/login'>
 							Login/Logout
 						</Link>
-					</navbar>
+					</nav>
 				</div>
 				<div className='main'>
 					<Routes>
@@ -106,8 +118,19 @@ const App = () => {
 						/>
 						<Route
 							path='/products/spirits'
-							element={<Products category='spirits' />}
+							element={<Products order={order} setOrder={setOrder} cart={cart} setCart={setCart} token={loggedInUser.token}/>}
 						/>
+						<Route
+							path='/products/beer'
+							element={<Products order={order} setOrder={setOrder} cart={cart} setCart={setCart} token={loggedInUser.token} category='beer' />}
+						/>
+						<Route
+							path='/products/wine'
+							element={<Products order={order} setOrder={setOrder} cart={cart} setCart={setCart} token={loggedInUser.token} category='wine' />}
+						/>
+						<Route
+							path='/products/spirits'
+							element={<Products order={order} setOrder={setOrder} cart={cart} setCart={setCart} token={loggedInUser.token} category='spirits' />}/>
 						<Route
 							path='/register'
 							element={
@@ -127,7 +150,7 @@ const App = () => {
 						></Route>
 						<Route
 							path='/cart'
-							element={<Cart cart={cart} setCart={setCart} />}
+							element={<Cart order={order} cart={cart} setCart={setCart} token={loggedInUser.token}/>}
 						></Route>
 						<Route path='/admin' element={<Admin />} />
 						<Route
