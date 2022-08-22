@@ -71,18 +71,18 @@ async function populateInitialData() {
   try {
     console.log('Creating products...')
     for (const beer of beers) {
-      products.createProduct(beer);
+      await products.createProduct(beer);
     }
     for (const wine of wines){
-      products.createProduct(wine);
+      await products.createProduct(wine);
     }
     for (const spirit of spirits){
-      products.createProduct(spirit);
+      await products.createProduct(spirit);
     }
     console.log('Creating users...')
     initialUsers.map(user => {users.createUser(user)})
 
-    // // const user = initialUsers[1]
+    //  const user = initialUsers[1]
     // initialUsers.map(user => {users.createUser(user)})
     // console.log('Creating dummy orders...');
     // const orderTest = await orders.createOrder(user.id);
@@ -99,4 +99,4 @@ async function populateInitialData() {
 buildTables()
   .then(populateInitialData)
   .catch(console.error)
-  .finally(client.end());
+  .finally(() => client.end());

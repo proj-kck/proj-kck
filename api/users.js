@@ -12,6 +12,7 @@ const {
 	getUserByEmail,
 } = require('../db/models/users');
 const {requireAdmin} = require('./utils');
+
 usersRouter.get('/', requireAdmin, async (req, res, next) => {
 		try{
 			const users = await getAllUsers();
