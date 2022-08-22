@@ -10,7 +10,7 @@ apiRouter.use(
   session({
     secret: 'secret',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
   }
 ));
 
@@ -65,6 +65,10 @@ apiRouter.use('/product_orders', por);
 
 const orderRouter = require('./orders')
 apiRouter.use('/orders', orderRouter)
+
+const guestRouter = require('./guest');
+apiRouter.use('/guest', guestRouter);
+
 apiRouter.use((error, req, res, next) => {
   res.send({
     name: error.name,

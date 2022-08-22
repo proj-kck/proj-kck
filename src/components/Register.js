@@ -35,7 +35,7 @@ const Register = (props) => {
 			setUsername('');
 			setEmail('');
 		} catch (error) {
-			console.log(error);
+			throw error;
 		}
 	};
 
