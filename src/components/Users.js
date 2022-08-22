@@ -9,13 +9,14 @@ const Users = (props) => {
 
     useEffect(() => {
         console.log(token, "okokok");
-        async function getUsers() {
-            const data = await getAllUsers(token);
-            console.log(data);
-            setUsers(data);
-          }
-          getUsers();
-    }, []);
+        
+            getAllUsers(token)
+            .then(res => {
+                console.log(res);
+                setUsers(res);         
+                
+            })
+         }, []);
     
     return (
         <div>

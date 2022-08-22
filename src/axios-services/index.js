@@ -162,7 +162,7 @@ export async function getAllUsers(token){
 			},
 		  })
 		  console.log(data, "yeeeees")
-		return data;
+		return data.users;
 	} catch (error) {
 		throw error;
 	}
