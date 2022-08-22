@@ -161,3 +161,19 @@ export async function register(username, password, email, is_admin) {
 		throw error;
 	}
 }
+export async function getAllUsers(token){
+	try {
+		// axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+		console.log(token);
+		const { data } = await axios.get('/api/users',  {
+			headers: {
+			  "Content-Type": "application/json",
+			  "Authorization": `Bearer ${token}`
+			},
+		  })
+		  console.log(data, "yeeeees")
+		return data;
+	} catch (error) {
+		throw error;
+	}
+}

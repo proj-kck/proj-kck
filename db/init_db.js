@@ -11,15 +11,9 @@ const { beers, wines, spirits, initialUsers } = require('./seedData')
 async function buildTables() {
   try {
     client.connect();
-
+    await dropTables()
     console.log('Building tables...');
 
-    await client.query(`
-      DROP TABLE IF EXISTS product_orders;
-      DROP TABLE IF EXISTS orders;
-      DROP TABLE IF EXISTS products;
-      DROP TABLE IF EXISTS users;
-    `)
 
     await client.query(`
       CREATE TABLE users (
@@ -66,7 +60,14 @@ async function buildTables() {
     throw error;
   }
 }
-
+async function dropTables() {
+  await client.query(`
+      DROP TABLE IF EXISTS product_orders;
+      DROP TABLE IF EXISTS orders;
+      DROP TABLE IF EXISTS products;
+      DROP TABLE IF EXISTS users;
+    `)
+}
 async function populateInitialData() {
   try {
     console.log('Creating products...')
@@ -80,7 +81,10 @@ async function populateInitialData() {
       await products.createProduct(spirit);
     }
     console.log('Creating users...')
-    initialUsers.map(user => {users.createUser(user)})
+    for (const user of initialUsers){
+      await users.createUser(user);
+    }
+    
 
     //  const user = initialUsers[1]
     // initialUsers.map(user => {users.createUser(user)})
@@ -99,4 +103,5 @@ async function populateInitialData() {
 buildTables()
   .then(populateInitialData)
   .catch(console.error)
-  .finally(() => client.end());
+  .finally(()=> client.end())
+
