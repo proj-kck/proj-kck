@@ -3,16 +3,18 @@ import IconButton from '@mui/material/IconButton';
 // import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { addProductToOrder, addProductToOrderGuest, getAllProductsOnOrder, getAllProductsOnOrderGuest, removeProductFromOrder, removeProductFromOrderGuest } from '../axios-services';
+import { addProductToOrder_Cart, addProductToOrderGuest, getAllProductsOnOrder, getAllProductsOnOrderGuest, removeProductFromOrder, removeProductFromOrderGuest, initiateOrder, initiateGuestCart } from '../axios-services';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = (props) => {
+	// const [order, setOrder] = useState();
 	const order = props.order;
 	const cart = props.cart;
 	const setCart = props.setCart;
-	const token = props.token;
+	const navigate = useNavigate();
 
 	const handleDelete = (e, product) => {
-		if (token) {
+		if (localStorage.token) {
 			removeProductFromOrder(order, product.product_id)
 			.then(res => {
 				getAllProductsOnOrder(order.id)
@@ -20,7 +22,6 @@ const Cart = (props) => {
 					setCart(resProds)
 			})})
 		} else {
-			console.log(product)
 			removeProductFromOrderGuest(product.product_id)
 			.then(res => {
 				getAllProductsOnOrderGuest()
@@ -32,8 +33,8 @@ const Cart = (props) => {
 	};
 
 	const handleAdd = (e, product) => {
-		if (token) {
-			addProductToOrder(product, order, token)
+		if (localStorage.token) {
+			addProductToOrder_Cart(product, order, localStorage.token)
 			.then(res => {
 				getAllProductsOnOrder(order.id)
 				.then(resProds => {
@@ -54,7 +55,24 @@ const Cart = (props) => {
 	};
 
 	useEffect(() => {
-		if (token) {
+		console.log(order)
+		if (order === undefined){
+			navigate('/');
+			return;
+		}
+		// if (localStorage.token && localStorage.username) {
+		// 	initiateOrder(localStorage.token)
+		// 		.then(res => {
+		// 			setOrder(res)
+		// 		})
+		// 	} else {
+		// 		initiateGuestCart()
+		// 		.then(res => {
+		// 			setOrder(res)
+		// 		})
+		// 	}
+
+		if (localStorage.token) {
 			getAllProductsOnOrder(order.id)
 			.then(res => {
 				setCart(res)

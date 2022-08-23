@@ -13,7 +13,6 @@ const CreatingProd = (props) => {
     const [img, setImg] = useState('');
     const [stock, setStock] = useState('');
     const [open, setOpen] = useState(false)
-    const navigate = useNavigate();
     const token = props.token;
 
     const submitHandler = async (evt) => {
@@ -30,10 +29,6 @@ const CreatingProd = (props) => {
     };
 
     const handleClose = (event) => {
-		if (reason === 'clickaway') {
-		  return;
-		}
-	
 		setOpen(false);
 	  };
 
