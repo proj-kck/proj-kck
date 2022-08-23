@@ -53,7 +53,8 @@ const Login = (props) => {
 
 	return (
 		<div className='login-container'>
-			<form onSubmit={submitHandler}>
+			<div className='box'>
+			<form className='form-container' onSubmit={submitHandler}>
 				{!loggedInUser.token ? 
 				<TextField
 					id='outlined-required'
@@ -87,6 +88,7 @@ const Login = (props) => {
 				{' '}
 				{!loggedInUser.token ? <a href='/register'>Register?</a> : null }
 			</form>
+			</div>
 		</div>
 	);
 };
