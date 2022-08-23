@@ -84,6 +84,7 @@ const App = () => {
 				</div>
 				<div className='main'>
 					<Routes>
+						<Route path='/' element={<Home></Home>}/>
 						<Route
 							path='/login'
 							element={
