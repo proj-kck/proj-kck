@@ -20,8 +20,14 @@ body {
 	margin: 0;
 	padding: 0;
 	height: 100vh;
+
 	width: 100vw;
 	background-image: url("https://images.squarespace-cdn.com/content/v1/5ac2cd53b1059801a0b1eb44/1523895904137-8J2QWI9MU430UYXULQTE/2017-05-23.jpg?format=2500w");
+
+	/* width: 100vw; */
+	position: relative;
+	min-height: 100vh;
+
 }
 nav {
 	display: flex;
@@ -43,6 +49,16 @@ li {
 	width: 100%;
 	margin: 0;
 	color: #ffffff;
+}
+/* #outline-required {
+	width: 10rem;
+} */
+.main {
+	overflow: auto;
+	min-height: 73vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 .link {
 	background-color:rgb(86, 17, 17);
@@ -99,6 +115,42 @@ h2 {
 
 .section-container:hover {
 	background-color: #b51825;
+}
+
+.footer-container {
+	background-color: #b51825;
+	position: relative;
+	width: 100%;
+  	height: 15vh;
+  	clear: both;
+  	bottom: 0;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	color: white;
+}
+
+.footer-link {
+	text-decoration: none;
+}
+
+.footer-link:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.login-links-container {
+	display: flex;
+	justify-content: space-around;
+	width: 30vw;
+}
+
+.project-links-container, .kenny-links-container, .cameron-links-container, .kesty-links-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	color: white;
 }
 
 li {
@@ -172,3 +224,4 @@ form {
 		21.3px 32px 18.5px -11px rgba(0, 0, 0, 0.081),
 		40px 60px 36px -11px rgba(0, 0, 0, 0.09);
 }
+

@@ -215,6 +215,12 @@ const initialUsers = [
         admin: false
     },
     {
+        username: 'User',
+        password: 'user',
+        email: 'king@inthenorth.com',
+        admin: false
+    },
+    {
         username: 'admin',
         password: 'admin',
         email: 'admin@admin.com',
