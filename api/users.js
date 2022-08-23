@@ -1,84 +1,105 @@
 const express = require('express');
 const usersRouter = express.Router();
-
-const { createUser, getAllUsers, getUserByUsername, } = require('../db');
-
+require('dotenv').config();
+const { JWT_SECRET } = process.env;
 const jwt = require('jsonwebtoken');
-usersRouter.get('/', async (req, res, next) =>  {
-    try {
-        const users = await getAllUsers();
-        res.send({
-            users
-        });
-    } catch ({ name, message }) {
-        next({ name, message});
-    }
-});
+
+const {
+	createUser,
+	getAllUsers,
+	getUserByUsername,
+	getUser,
+	getUserByEmail,
+} = require('../db/models/users');
+const {requireAdmin} = require('./utils');
+
+usersRouter.get('/', requireAdmin, async (req, res, next) => {
+		try{
+			const users = await getAllUsers();
+			res.send({
+				users,
+			});
+		} catch (error) {
+			next (error);
+		}
+	}
+);	
+
+usersRouter.get('/admin', requireAdmin, async (req, res, next) => {
+	try {
+		res.send('User is an authorized admin')
+	} catch (error) {
+		next (error)
+	}
+})
+
 usersRouter.post('/login', async (req, res, next) => {
+	const { username, password } = req.body;
 
-    const { username, password } = req.body;
-
-    if (!username || !password) {
-      next({
-        name: "MissingCredentialsError",
-        message: "Please provide a username and password"
-      });
-    }
-    try {
-      const user = await getUserByUsername(username);
-    if (user && user.password == password) {
-        const token = jwt.sign({ 
-          id: user.id, 
-          username
-        }, process.env.JWT_SECRET, {
-          expiresIn: '1w'
-        }); 
-        res.send({ 
-          message: "you are logged in",
-          token 
-        });
-      } else {
-        next({ 
-          name: 'IncorrectCredentialsError', 
-          message: 'Username or password is incorrect'
-        });
-      }
-    } catch(error) {
-      console.log(error);
-      next(error);
-    }
+	if (!username || !password) {
+		next({
+			name: 'MissingCredentialsError',
+			message: 'Please provide a username and password',
+		});
+	}
+	try {
+		const user = await getUser({ username, password });
+		if (user) {
+			const token = jwt.sign(user, process.env.JWT_SECRET, {
+				expiresIn: '1w',
+			});
+			res.send({
+				message: 'You are logged in.',
+				token,
+				user,
+			});
+		} else {
+			next({
+				name: 'IncorrectCredentialsError',
+				message: 'Username or password is incorrect',
+			});
+		}
+	} catch (error) {
+		next(error);
+	}
 });
-usersRouter.post('/register', async (req, res, next) => {
 
-    const { username, password, name, location } = req.body;
-  
-    try {
-      const _user = await getUserByUsername(username);
-    
-    if (_user) {
-        next({
-          name: 'UserExistsError',
-          message: 'A user by that username already exists'
-        });
-      }
-    const user = await createUser({
-        username,
-        password,
-        name,
-        location,
-      });
-    const token = jwt.sign({ 
-        id: user.id, 
-        username
-      }, process.env.JWT_SECRET, {
-        expiresIn: '1w'
-      });
-    res.send({ 
-        message: "Thanks for signing up!",
-        token 
-      });
-    } catch ({ name, message }) {
-      next({ name, message });
-    } 
-}); 
+usersRouter.post('/register', async (req, res, next) => {
+	const { username, password, email, is_admin } = req.body;
+
+	try {
+		const _user = await getUserByUsername(username);
+		const __user = await getUserByEmail(email);
+
+		if (_user) {
+			next({
+				name: 'UserExistsError',
+				message: `Username ${username} already exists`,
+			});
+		}
+		if (__user) {
+			next({
+				name: 'EmailExistsError',
+				message: `An account already exists with the email ${email}`,
+			});
+		}
+
+		const user = await createUser({
+			username,
+			password,
+			email,
+			is_admin,
+		});
+
+		const token = jwt.sign({ user }, JWT_SECRET, { expiresIn: '1w' });
+		res.send({
+			message: 'You are now registered.',
+			token,
+			user: user,
+		});
+	} catch ({ name, message }) {
+		next({ name, message });
+	}
+});
+
 module.exports = usersRouter;

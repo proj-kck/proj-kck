@@ -4,66 +4,245 @@ import Login from './Login';
 import Register from './Register';
 import Home from './Home';
 import Products from './Products';
-
-// getAPIHealth is defined in our axios-services directory index.js
-// you can think of that directory as a collection of api adapters
-// where each adapter fetches specific info from our express server's /api route
-import { getAPIHealth } from '../axios-services';
+import Admin from './Admin';
+import Users from './Users';
+import CreateProdAdmin from './CreateProdAdmin';
+import EditProdAdmin from './EditProdAdmin';
+import { initiateGuestCart, initiateOrder, isTokenAdmin, login } from '../axios-services';
 import '../style/App.css';
+import SingleProductView from './SingleProductView';
+import Cart from './Cart';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+
+
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import { IconButton } from '@mui/material';
 
 const App = () => {
-	const [APIHealth, setAPIHealth] = useState('');
+	const [username, setUsername] = useState('');
+	const [password, setPassword] = useState('');
+	const [loggedInUser, setLoggedInUser] = useState({});
+	const [cart, setCart] = useState([]);
+	const [order, setOrder] = useState();
+	const [isAdmin, setIsAdmin] = useState(false)
+	const [open, setOpen] = useState(false);
 
 	useEffect(() => {
-		// follow this pattern inside your useEffect calls:
-		// first, create an async function that will wrap your axios service adapter
-		// invoke the adapter, await the response, and set the data
-		const getAPIStatus = async () => {
-			const { healthy } = await getAPIHealth();
-			setAPIHealth(healthy ? 'api is up! :D' : 'api is down :/');
-		};
-
-		// second, after you've defined your getter above
-		// invoke it immediately after its declaration, inside the useEffect callback
-		getAPIStatus();
+		if (localStorage.token && localStorage.username) {
+			setLoggedInUser({
+				token: localStorage.token,
+				username: localStorage.username,
+			});
+			initiateOrder(localStorage.token)
+				.then(res => {
+					setOrder(res)
+				})
+			isTokenAdmin(localStorage.token)
+			.then(res => {
+				if (res === 'User is an authorized admin'){
+					setIsAdmin(true);
+				} else {
+					setIsAdmin(false);
+				}
+			})
+			} else {
+				initiateGuestCart()
+				.then(res => {
+					setOrder(res)
+				})
+			}		
 	}, []);
+
+	const handleLoginAdmin = async (e) => {
+		localStorage.removeItem('username');
+		localStorage.removeItem('token');
+		setLoggedInUser({});
+
+		const resp = await login('admin', 'admin');
+		const token = resp.token;
+		const user = { username: 'admin', token };
+		localStorage.setItem('token', token);
+		localStorage.setItem('username', 'admin')
+		setLoggedInUser(user);
+		setPassword('');
+		setUsername('');
+		window.location.reload(false);
+	}
+
+	const handleLoginUser = async (e) => {
+		localStorage.removeItem('username');
+		localStorage.removeItem('token');
+		setLoggedInUser({});
+
+		const resp = await login('JohnSnow', 'winteriscoming');
+		const token = resp.token;
+		const user = { username: 'JohnSnow', token };
+		localStorage.setItem('token', token);
+		localStorage.setItem('username', 'JohnSnow')
+		setLoggedInUser(user);
+		setPassword('');
+		setUsername('');
+		window.location.reload(false);
+	}
+
+	const handleClose = (event) => {
+		if (reason === 'clickaway') {
+		  return;
+		}
+	
+		setOpen(false);
+	  };
 
 	return (
 		<div className='app-container'>
 			<Router>
 				<div className='navbar'>
 					<div className='title-cart'>
-						<h1>KC Liqours</h1>
-						<a href='/'>
-							<h2>Cart</h2>
-						</a>
+						<h1 className='site-title'>KC Liquors</h1>
+						<div>
+							<h2 className='white'>
+								Hello {loggedInUser.username ? loggedInUser.username : 'Guest'}!
+							</h2>
+
+							<Link className='white' to='/cart'>
+								<ShoppingCartIcon></ShoppingCartIcon>
+							</ Link>
+						</div>
 					</div>
-					<navbar>
+					<nav>
 						<Link className='link' to='/home'>
 							Home
 						</Link>
 						<Link className='link' to='/products'>
 							Products
 						</Link>
+						{isAdmin ? 
+						<Link className='link' to='/admin'>
+							Admin
+						</Link>
+						: null}
 						<Link className='link' to='/login'>
 							Login/Logout
 						</Link>
-					</navbar>
+					</nav>
 				</div>
 				<div className='main'>
 					<Routes>
-						<Route path='/login' element={<Login />} />
+						<Route path='/' element={<Home></Home>}/>
+						<Route
+							path='/login'
+							element={
+								<Login
+									setUsername={setUsername}
+									setPassword={setPassword}
+									username={username}
+									password={password}
+									loggedInUser={loggedInUser}
+									setLoggedInUser={setLoggedInUser}
+								/>
+							}
+						/>
 						<Route path='/home' element={<Home />} />
-						<Route path='/products' element={<Products />} />
-						<Route path='/register' element={<Register />}></Route>
+						<Route
+							path='/products'
+							element={<Products cart={cart} setCart={setCart} />}
+						/>
+						<Route
+							path='/products/beer'
+							element={<Products category='beer' />}
+						/>
+						<Route
+							path='/products/wine'
+							element={<Products category='wine' />}
+						/>
+						<Route
+							path='/products/spirits'
+							element={<Products order={order} setOrder={setOrder} cart={cart} setCart={setCart} token={loggedInUser.token}/>}
+						/>
+						<Route
+							path='/products/beer'
+							element={<Products order={order} setOrder={setOrder} cart={cart} setCart={setCart} token={loggedInUser.token} category='beer' />}
+						/>
+						<Route
+							path='/products/wine'
+							element={<Products order={order} setOrder={setOrder} cart={cart} setCart={setCart} token={loggedInUser.token} category='wine' />}
+						/>
+						<Route
+							path='/products/spirits'
+							element={<Products order={order} setOrder={setOrder} cart={cart} setCart={setCart} token={loggedInUser.token} category='spirits' />}/>
+						<Route
+							path='/register'
+							element={
+								<Register
+									setUsername={setUsername}
+									setPassword={setPassword}
+									username={username}
+									password={password}
+									loggedInUser={loggedInUser}
+									setLoggedInUser={setLoggedInUser}
+								/>
+							}
+						></Route>
+						<Route
+							path='/products/:id'
+							element={<SingleProductView />}
+						></Route>
+						<Route
+							path='/cart'
+							element={<Cart order={order} cart={cart} setCart={setCart} token={loggedInUser.token}/>}
+						></Route>
+						<Route path='/admin' element={<Admin />} />
+						<Route
+							path='/admin/viewusers'
+							element={<Users token={loggedInUser.token}/>} />
+						<Route
+							path='/admin/createnewproduct'
+							element={<CreateProdAdmin token={loggedInUser.token}/>} />
+						<Route
+							path='/admin/editproduct'
+							element={<EditProdAdmin token={loggedInUser.token}/>} />
+						<Route
+							path='/admin/editproduct/:id'
+							element={<SingleProductView edit={true} token={loggedInUser.token}/>} />
 					</Routes>
 				</div>
+				<div className='footer-container'>
+					<div className='login-links-container'>
+						<p className='footer-link' onClick={handleLoginAdmin}>Login As Admin</p>
+						<p className='footer-link' onClick={handleLoginUser}>Login As User</p>
+					</div>
+					<div className='project-links-container'>
+						<p>Project's GitHub</p>
+						<IconButton onClick={() => window.open("https://github.com/proj-kck", "_blank")} > <GitHubIcon></GitHubIcon></IconButton>
+					</div>
+					<div className='kenny-links-container'>
+						<p>Kenny's Links</p>
+						<div>
+							<IconButton onClick={() => window.open("https://www.linkedin.com/in/kenneth-barker-developer", "_blank")} color='primary'> <LinkedInIcon></LinkedInIcon></IconButton>
+							<IconButton onClick={() => window.open("https://github.com/kbarker-webdev", "_blank")} > <GitHubIcon></GitHubIcon></IconButton>
+						</div>
+					</div>
+					<div className='cameron-links-container'>
+						<p>Cameron's Links</p>
+						<div>
+							<IconButton onClick={() => window.open("https://github.com/cgudge", "_blank")} color='primary'> <LinkedInIcon></LinkedInIcon></IconButton>
+							<IconButton onClick={() => window.open("https://github.com/cgudge", "_blank")} > <GitHubIcon></GitHubIcon></IconButton>
+						</div>
+					</div>
+					<div className='kesty-links-container'>
+						<p>Ketsy's Links</p>
+						<div>
+							<IconButton onClick={() => window.open("https://www.linkedin.com/in/ketsy-delgado/", "_blank")} color='primary'> <LinkedInIcon></LinkedInIcon></IconButton>
+							<IconButton onClick={() => window.open("https://github.com/ketsy22", "_blank")} > <GitHubIcon></GitHubIcon></IconButton>
+						</div>
+					</div>
+					
+					
+				</div>
 			</Router>
-
-			<h1>Hello, World!</h1>
-			<p>API Status: {APIHealth}</p>
+			
 		</div>
 	);
 };
-
 export default App;
