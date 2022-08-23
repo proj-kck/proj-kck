@@ -1,6 +1,5 @@
 const apiRouter = require('express').Router();
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
 const { JWT_SECRET } = process.env;
 var session = require('express-session');
 
