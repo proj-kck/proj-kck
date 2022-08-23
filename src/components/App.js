@@ -12,10 +12,15 @@ import {
 	initiateGuestCart,
 	initiateOrder,
 	isTokenAdmin,
+	login,
 } from '../axios-services';
 import '../style/App.css';
 import SingleProductView from './SingleProductView';
 import Cart from './Cart';
+
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import { IconButton } from '@mui/material';
 
 const App = () => {
 	const [username, setUsername] = useState('');
@@ -24,6 +29,7 @@ const App = () => {
 	const [cart, setCart] = useState([]);
 	const [order, setOrder] = useState();
 	const [isAdmin, setIsAdmin] = useState(false);
+	const [open, setOpen] = useState(false);
 
 	useEffect(() => {
 		if (localStorage.token && localStorage.username) {
@@ -34,6 +40,13 @@ const App = () => {
 			initiateOrder(localStorage.token).then((res) => {
 				setOrder(res);
 			});
+			isTokenAdmin(localStorage.token).then((res) => {
+				if (res === 'User is an authorized admin') {
+					setIsAdmin(true);
+				} else {
+					setIsAdmin(false);
+				}
+			});
 		} else {
 			initiateGuestCart().then((res) => {
 				setOrder(res);
@@ -41,12 +54,52 @@ const App = () => {
 		}
 	}, []);
 
+	const handleLoginAdmin = async (e) => {
+		localStorage.removeItem('username');
+		localStorage.removeItem('token');
+		setLoggedInUser({});
+
+		const resp = await login('admin', 'admin');
+		const token = resp.token;
+		const user = { username: 'admin', token };
+		localStorage.setItem('token', token);
+		localStorage.setItem('username', 'admin');
+		setLoggedInUser(user);
+		setPassword('');
+		setUsername('');
+		window.location.reload(false);
+	};
+
+	const handleLoginUser = async (e) => {
+		localStorage.removeItem('username');
+		localStorage.removeItem('token');
+		setLoggedInUser({});
+
+		const resp = await login('JohnSnow', 'winteriscoming');
+		const token = resp.token;
+		const user = { username: 'JohnSnow', token };
+		localStorage.setItem('token', token);
+		localStorage.setItem('username', 'JohnSnow');
+		setLoggedInUser(user);
+		setPassword('');
+		setUsername('');
+		window.location.reload(false);
+	};
+
+	const handleClose = (event) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+
+		setOpen(false);
+	};
+
 	return (
 		<div className='app-container'>
 			<Router>
 				<div className='navbar'>
 					<div className='title-cart'>
-						<h1 className='site-title'>KC Liqours</h1>
+						<h1 className='site-title'>KC Liquors</h1>
 						<div>
 							<h2 className='white'>
 								Hello{' '}
@@ -175,6 +228,114 @@ const App = () => {
 							}
 						></Route>
 					</Routes>
+				</div>
+				<div className='footer-container'>
+					<div className='login-links-container'>
+						<p className='footer-link' onClick={handleLoginAdmin}>
+							Login As Admin
+						</p>
+						<p className='footer-link' onClick={handleLoginUser}>
+							Login As User
+						</p>
+					</div>
+					<div className='project-links-container'>
+						<p>Project's GitHub</p>
+						<IconButton
+							onClick={() =>
+								window.open(
+									'https://github.com/proj-kck',
+									'_blank'
+								)
+							}
+						>
+							{' '}
+							<GitHubIcon></GitHubIcon>
+						</IconButton>
+					</div>
+					<div className='kenny-links-container'>
+						<p>Kenny's Links</p>
+						<div>
+							<IconButton
+								onClick={() =>
+									window.open(
+										'https://www.linkedin.com/in/kenneth-barker-developer',
+										'_blank'
+									)
+								}
+								color='primary'
+							>
+								{' '}
+								<LinkedInIcon></LinkedInIcon>
+							</IconButton>
+							<IconButton
+								onClick={() =>
+									window.open(
+										'https://github.com/kbarker-webdev',
+										'_blank'
+									)
+								}
+							>
+								{' '}
+								<GitHubIcon></GitHubIcon>
+							</IconButton>
+						</div>
+					</div>
+					<div className='cameron-links-container'>
+						<p>Cameron's Links</p>
+						<div>
+							<IconButton
+								onClick={() =>
+									window.open(
+										'https://github.com/cgudge',
+										'_blank'
+									)
+								}
+								color='primary'
+							>
+								{' '}
+								<LinkedInIcon></LinkedInIcon>
+							</IconButton>
+							<IconButton
+								onClick={() =>
+									window.open(
+										'https://github.com/cgudge',
+										'_blank'
+									)
+								}
+							>
+								{' '}
+								<GitHubIcon></GitHubIcon>
+							</IconButton>
+						</div>
+					</div>
+					<div className='kesty-links-container'>
+						<p>Ketsy's Links</p>
+						<div>
+							<IconButton
+								onClick={() =>
+									window.open(
+										'https://www.linkedin.com/in/ketsy-delgado/',
+										'_blank'
+									)
+								}
+								color='primary'
+							>
+								{' '}
+								<LinkedInIcon></LinkedInIcon>
+							</IconButton>
+							<IconButton
+								onClick={() =>
+									window.open(
+										'https://github.com/ketsy22',
+										'_blank'
+									)
+								}
+							>
+								{' '}
+								<GitHubIcon></GitHubIcon>
+							</IconButton>
+						</div>
+					</div>
 				</div>
 			</Router>
 		</div>
