@@ -53,10 +53,6 @@ const SingleProductView = (props) => {
 	}, []);
 
 	const handleClose = (event) => {
-		if (reason === 'clickaway') {
-		  return;
-		}
-	
 		setOpen(false);
 	  };
 

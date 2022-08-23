@@ -47,6 +47,23 @@ export async function getAllProductsOnOrderGuest(){
 	}
 }
 
+export async function addProductToOrder_Cart(product, order, token){
+	try {
+		const postData = {
+			orders_id: order.id,
+			product_id: product.product_id,
+			product_name: product.product_name,
+			price_at_purchase: product.price_at_purchase,
+			quantity_order: 1
+		}
+		axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+		const { data } = await axios.post(`/api/product_orders/add`, postData);
+		return data;
+	} catch (error) {
+		throw error;
+	}
+}
+
 
 export async function addProductToOrder(product, order, token){
 	try {

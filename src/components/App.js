@@ -86,14 +86,6 @@ const App = () => {
 		window.location.reload(false);
 	}
 
-	const handleClose = (event) => {
-		if (reason === 'clickaway') {
-		  return;
-		}
-	
-		setOpen(false);
-	  };
-
 	return (
 		<div className='app-container'>
 			<Router>
