@@ -1,7 +1,7 @@
 const apiRouter = require('express').Router();
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = process.env;
-var session = require('express-session');
+var session = require('cookie-session');
 
 const { users } = require('../db')
 

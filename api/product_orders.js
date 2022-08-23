@@ -1,9 +1,7 @@
 const express = require ('express');
 const productOrdersRouter = express.Router();
 
-const {addProductToOrder, getAllProductsOnOrder, updateProductOrders, removeProductFromOrder } = require('../db/models/product_orders');
-
-const jwt = require('jsonwebtoken');
+const {addProductToOrder, getAllProductsOnOrder, removeProductFromOrder } = require('../db/models/product_orders');
 
 productOrdersRouter.post('/add', async (req, res, next) => {
     try {
