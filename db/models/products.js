@@ -39,7 +39,7 @@ async function updateProduct(product_id, fields = {}){
       const { rows: [product] } = await client.query(`
       UPDATE products
       SET ${ setString }
-      WHERE id=${ id }
+      WHERE id=${ product_id }
       RETURNING *;
       `, Object.values(fields));
       return product;
@@ -92,5 +92,7 @@ module.exports = {
   getProductById,
   getAllProducts,
   createProduct,
-  getAllProductsByCategory
+  getAllProductsByCategory, 
+  updateProduct,
+  deleteProduct
 };

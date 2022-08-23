@@ -4,30 +4,28 @@ import Login from './Login';
 import Register from './Register';
 import Home from './Home';
 import Products from './Products';
-import { getAllProductsOnOrder, initiateGuestCart } from '../axios-services';
-
-import { getAPIHealth, initiateOrder } from '../axios-services';
+import Admin from './Admin';
+import Users from './Users';
+import CreateProdAdmin from './CreateProdAdmin';
+import EditProdAdmin from './EditProdAdmin';
+import {
+	initiateGuestCart,
+	initiateOrder,
+	isTokenAdmin,
+} from '../axios-services';
 import '../style/App.css';
 import SingleProductView from './SingleProductView';
 import Cart from './Cart';
-import Checkout from './Checkout';
 
 const App = () => {
-	const [APIHealth, setAPIHealth] = useState('');
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [loggedInUser, setLoggedInUser] = useState({});
-	const [order, setOrder] = useState({});
 	const [cart, setCart] = useState([]);
+	const [order, setOrder] = useState();
+	const [isAdmin, setIsAdmin] = useState(false);
 
 	useEffect(() => {
-		const getAPIStatus = async () => {
-			const { healthy } = await getAPIHealth();
-			setAPIHealth(healthy ? 'api is up! :D' : 'api is down :/');
-		};
-
-		getAPIStatus();
-
 		if (localStorage.token && localStorage.username) {
 			setLoggedInUser({
 				token: localStorage.token,
@@ -48,7 +46,7 @@ const App = () => {
 			<Router>
 				<div className='navbar'>
 					<div className='title-cart'>
-						<h1>KC Liqours</h1>
+						<h1 className='site-title'>KC Liqours</h1>
 						<div>
 							<h2 className='white'>
 								Hello{' '}
@@ -58,8 +56,8 @@ const App = () => {
 								!
 							</h2>
 
-							<Link to='/cart'>
-								<h2 className='white'>Cart</h2>
+							<Link className='white' to='/cart'>
+								<ShoppingCartIcon></ShoppingCartIcon>
 							</Link>
 						</div>
 					</div>
@@ -70,6 +68,11 @@ const App = () => {
 						<Link className='link' to='/products'>
 							Products
 						</Link>
+						{isAdmin ? (
+							<Link className='link' to='/admin'>
+								Admin
+							</Link>
+						) : null}
 						<Link className='link' to='/login'>
 							Login/Logout
 						</Link>
@@ -77,6 +80,7 @@ const App = () => {
 				</div>
 				<div className='main'>
 					<Routes>
+						<Route path='/' element={<Home></Home>} />
 						<Route
 							path='/login'
 							element={
@@ -156,7 +160,7 @@ const App = () => {
 							}
 						></Route>
 						<Route
-							path='/products/id/:id'
+							path='/products/:id'
 							element={<SingleProductView />}
 						></Route>
 						<Route
@@ -170,15 +174,10 @@ const App = () => {
 								/>
 							}
 						></Route>
-						<Route path='/checkout' element={<Checkout />}></Route>
 					</Routes>
 				</div>
 			</Router>
-
-			<h1>Hello, World!</h1>
-			<p>API Status: {APIHealth}</p>
 		</div>
 	);
 };
-
 export default App;

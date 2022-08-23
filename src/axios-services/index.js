@@ -48,6 +48,7 @@ export async function getAllProductsOnOrderGuest(){
 	}
 }
 
+
 export async function addProductToOrder(product, order, token){
 	try {
 		const postData = {
@@ -146,6 +147,62 @@ export async function register(username, password, email, is_admin) {
 			email,
 			is_admin,
 		});
+		return data;
+	} catch (error) {
+		throw error;
+	}
+}
+export async function getAllUsers(token){
+	try {
+		axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+		const { data } = await axios.get('/api/users')
+		  console.log(data, "yeeeees")
+		return data.users;
+	} catch (error) {
+		throw error;
+	}
+}
+
+export async function createProduct(token, name, description, price, category, img, quantity) {
+	try {
+		const postData = {
+			name,
+			description,
+			price,
+			category,
+			img,
+			quantity
+		}
+		axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+		const { data } = await axios.post('/api/products/add', postData);
+		return data;
+	} catch (error) {
+		throw error;
+	}
+}
+
+export async function editProduct(token, id, name, description, price, category, img, quantity) {
+	try {
+		const postData = {
+			name,
+			description,
+			price,
+			category,
+			img,
+			quantity
+		}
+		axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+		const { data } = await axios.patch(`/api/products/${id}`, postData);
+		return data;
+	} catch (error) {
+		throw error;
+	}
+}
+
+export async function isTokenAdmin(token) {
+	try {
+		axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+		const { data } = await axios.get(`/api/users/admin`);
 		return data;
 	} catch (error) {
 		throw error;

@@ -10,18 +10,20 @@ const Products = (props) => {
 	const [products, setProducts] = useState([]);
 	const category = props.category;
 	const token = props.token;
-
+	const edit = props.edit
 	const order = props.order;
+	const [productLink, setProductLink] = useState('')
 
 	useEffect(() => {
-		// async function getData() {
 			getAllProducts(category)
 			.then(res => {
 				setProducts(res)
 			});
-		// }
-		// getData();
 	}, [category]);
+
+	const handleEdit = (e) => {
+		
+	}
 
 	const handleMouseEnter = (e) => {
 		e.target.parentNode.parentNode.parentNode.className +=
@@ -55,7 +57,8 @@ const Products = (props) => {
 			})
 		}
 		
-
+		edit ? setProductLink('/products/edit/') : setProductLink('/products/');
+		
 	};
 
 	return (
@@ -65,7 +68,7 @@ const Products = (props) => {
 					return (
 						<li id={product.id} key={product.id}>
 							<div className='product'>
-								<Link to={`/products/id/${product.id}`}>
+								<Link to={`${productLink}${product.id}`}>
 									<img
 										src={product.img}
 										alt={`${product.name}`}
@@ -75,6 +78,16 @@ const Products = (props) => {
 										onMouseLeave={handleMouseLeave}
 									/>
 								</Link>
+								{edit ? 
+								<Button
+									id={index}
+									variant='contained'
+									onMouseEnter={handleMouseEnterButton}
+									onMouseLeave={handleMouseLeaveButton}
+									onClick={handleEdit}
+								>
+									Edit
+								</Button> : 
 								<Button
 									id={index}
 									variant='contained'
@@ -83,7 +96,7 @@ const Products = (props) => {
 									onClick={handleAddToCart}
 								>
 									Add to cart
-								</Button>
+								</Button>}
 								<h2>${product.price}</h2>
 								<h4>{product.name}</h4>
 							</div>

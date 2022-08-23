@@ -1,62 +1,34 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { editProduct, getProductById } from '../axios-services';
+import React, {useState} from 'react';
 import { TextField, Button, InputLabel, Select, MenuItem } from '@mui/material';
-import './SingleProductPage.css';
+import { createProduct } from '../axios-services';
+import { useNavigate } from 'react-router-dom';
 
-const SingleProductView = (props) => {
-	let navigate = useNavigate();
-	const { id } = useParams();
-	const [product, setProduct] = useState({});
-	const [name, setName] = useState(''); 
+const CreatingProd = (props) => {
+    const [name, setName] = useState(''); 
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
     const [category, setCategory] = useState('');
     const [img, setImg] = useState('');
     const [stock, setStock] = useState('');
-	const edit = props.edit;
-	const token = props.token;
+    const navigate = useNavigate();
+    const token = props.token;
 
-	const submitHandler = async (evt) => {
+    const submitHandler = async (evt) => {
         evt.preventDefault();
         try {
-            editProduct(token, product.id, name, description, price, category, img, stock)
+            createProduct(token, name, description, price, category, img, stock)
             .then(navigate('/admin'))
         } catch (error) {
             throw error;
         }
     };
 
-	useEffect(() => {
-		getProductById(id)
-		.then(res => {
-			setProduct(res)
-			if (edit) {
-				setName(res.name);
-				setDescription(res.description);
-				setPrice(res.price);
-				setCategory(res.category);
-				setImg(res.img);
-				setStock(res.quantity);
-			}
-			if (!res.id) {
-				navigate(-1);
-			}
-		});
-	}, []);
-
-	return (
-		<div id='single-product'>
-			<img src={product.img} alt={product.name} />
-			<div className='product-info'>
-				{!edit ? <>
-				<h2>
-					{product.name} ${product.price}
-				</h2>
-				<h3>{product.description}</h3>
-				<Button variant='contained'>Add to cart</Button> </>: <>
-				<TextField
+    return (
+        <div>
+            <br/>
+        <h3 style={{textAlign: 'center'}}>Create a product:</h3>
+            <form onSubmit={submitHandler}>
+                <TextField
 					id='outlined-required'
 					label='Name'
 					variant='outlined'
@@ -114,23 +86,10 @@ const SingleProductView = (props) => {
 					onClick={submitHandler}
 					type='submit'
 					>
-						Save Changes
-					</Button>
-				
-				</> }
-				<br/>
-				{edit ? 
-				<Button
-					variant='contained'
-					onClick={submitHandler}
-					type='submit'
-					color='warning'
-					>
-						Delete Product
-					</Button> : null}
-			</div>
-		</div>
-	);
-};
-
-export default SingleProductView;
+						Add Product
+					</Button>           
+            </form>
+        </div>
+    )
+}
+export default CreatingProd;

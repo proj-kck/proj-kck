@@ -31,17 +31,18 @@ const Login = (props) => {
 			}
 			setPassword('');
 			setUsername('');
+			window.location.reload(false);
 		} catch (error) {
 			throw error;
 		}
 	};
 	const handleLogout = async (e) => {
-		//e.preventDefault();
+		e.preventDefault();
 		try {
 			localStorage.removeItem('username');
 			localStorage.removeItem('token');
 			props.setLoggedInUser({});
-			navigate('/login');
+			window.location.reload(false);
 		} catch (error) {
 			throw error;
 		}
@@ -77,7 +78,6 @@ const Login = (props) => {
 				<Button
 					variant='contained'
 					onClick={handleLogout}
-					type='submit'
 					>
 						Logout
 					</Button> }
