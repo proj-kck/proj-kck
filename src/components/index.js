@@ -1,18 +1,10 @@
-import 'react-toastify/dist/ReactToastify.css';
-import { toast } from 'react-toastify';
+import { Snackbar } from '@mui/material';
 
 export { default as App } from './App';
 
-export const successMsg = (msg) => {
-    toast.success(msg, {
-        position: "bottom-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        });
+export const successMsg = (element) => {
+        element.className = "show";
+        setTimeout(function(){ element.className = element.className.replace("show", ""); }, 3000);
 }
 
 

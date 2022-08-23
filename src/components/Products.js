@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { addProductToOrder, addProductToOrderGuest, getAllProducts } from '../axios-services';
 import { successMsg } from '.';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 
 
@@ -12,7 +14,8 @@ const Products = (props) => {
 	const token = props.token;
 	const edit = props.edit
 	const order = props.order;
-	const [productLink, setProductLink] = useState('')
+	const [productLink, setProductLink] = useState('');
+	const [open, setOpen] = useState(false);
 
 	useEffect(() => {
 			getAllProducts(category)
@@ -42,6 +45,14 @@ const Products = (props) => {
 		e.target.parentNode.parentNode.className = '';
 	};
 
+	const handleClose = (event) => {
+		if (reason === 'clickaway') {
+		  return;
+		}
+	
+		setOpen(false);
+	  };
+
 	const handleAddToCart = (e) => {
 		let currItem = products[e.target.id];
 
@@ -58,6 +69,11 @@ const Products = (props) => {
 		}
 		
 		edit ? setProductLink('/products/edit/') : setProductLink('/products/');
+
+		if (!edit) {
+			setOpen(true)
+			setTimeout(function(){ setOpen(false)}, 3000);
+		}
 		
 	};
 
@@ -104,6 +120,11 @@ const Products = (props) => {
 					);
 				})}
 			</ul>
+			<Snackbar anchorOrigin={{vertical: 'bottom', horizontal: 'center' }} open={open} autoHideDuration={6000} onRequestClose={handleClose}>
+  				<Alert onRequestClose={handleClose} severity="success" sx={{ width: '100%' }}>
+    				Product Added to Cart
+  				</Alert>
+			</Snackbar>
 		</div>
 	);
 };
