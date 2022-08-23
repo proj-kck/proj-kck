@@ -99,7 +99,7 @@ const App = () => {
 			<Router>
 				<div className='navbar'>
 					<div className='title-cart'>
-						<h1 className='site-title'>KC Liqours</h1>
+						<h1 className='site-title'>KC Liquors</h1>
 						<div>
 							<h2 className='white'>
 								Hello {loggedInUser.username ? loggedInUser.username : 'Guest'}!

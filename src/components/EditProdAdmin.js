@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import Products from './Products';
 
 const EditProd = () => {
-    
+
     return (
         <div>
         <h1 style={{textAlign: 'center', color: 'black'}}>Edit a product</h1>
