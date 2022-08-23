@@ -84,7 +84,7 @@ async function populateInitialData() {
     for (const user of initialUsers){
       await users.createUser(user);
     }
-    
+    console.log('db rebuilt')
 
     //  const user = initialUsers[1]
     // initialUsers.map(user => {users.createUser(user)})
