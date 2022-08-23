@@ -2,7 +2,7 @@
 
 * {
 	box-sizing: border-box;
-	font-family: Roboto;
+	font-family:Georgia, 'Times New Roman', Times, serif;
 	transition: all 0.3s ease-in-out;
 }
 
@@ -21,6 +21,7 @@ body {
 	padding: 0;
 	height: 100vh;
 	width: 100vw;
+	background-image: url("https://images.squarespace-cdn.com/content/v1/5ac2cd53b1059801a0b1eb44/1523895904137-8J2QWI9MU430UYXULQTE/2017-05-23.jpg?format=2500w");
 }
 nav {
 	display: flex;
@@ -34,7 +35,7 @@ li {
 	border-radius: 10px;
 }
 .navbar {
-	background-color: #b51825;
+	background-color:rgb(86, 17, 17);
 	border-bottom: 1px solid #dee2e6;
 	display: flex;
 	flex-direction: column;
@@ -44,7 +45,7 @@ li {
 	color: #ffffff;
 }
 .link {
-	background-color: #b51825;
+	background-color:rgb(86, 17, 17);
 	transition: all 0.3s ease-in-out;
 	width: 100%;
 	height: 3rem;
@@ -134,7 +135,7 @@ li {
 .product h2,
 h3,
 h4 {
-	color: #1e1d1d;
+	color:whitesmoke;
 	padding: 0;
 	margin: 0;
 	margin-top: 0.5rem;
