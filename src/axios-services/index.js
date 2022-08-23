@@ -1,4 +1,3 @@
-import { ErrorSharp } from '@mui/icons-material';
 import axios from 'axios';
 
 export async function getAPIHealth() {
