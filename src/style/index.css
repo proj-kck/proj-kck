@@ -29,6 +29,18 @@ body {
 	min-height: 100vh;
 
 }
+.form-container {
+	background-color: white;
+	margin: 2rem;
+
+}
+.box {
+	background-color: white;
+	height: 15rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 nav {
 	display: flex;
 	justify-content: space-around;
@@ -118,7 +130,7 @@ h2 {
 }
 
 .footer-container {
-	background-color: #b51825;
+	background-color: rgb(86, 17, 17);
 	position: relative;
 	width: 100%;
   	height: 15vh;
@@ -223,5 +235,6 @@ form {
 		13.4px 20.1px 12.4px -11px rgba(0, 0, 0, 0.075),
 		21.3px 32px 18.5px -11px rgba(0, 0, 0, 0.081),
 		40px 60px 36px -11px rgba(0, 0, 0, 0.09);
+	background-color: white;
 }
 
