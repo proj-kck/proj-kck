@@ -10,6 +10,7 @@ import { getAPIHealth, initiateOrder } from '../axios-services';
 import '../style/App.css';
 import SingleProductView from './SingleProductView';
 import Cart from './Cart';
+import Checkout from './Checkout';
 
 const App = () => {
 	const [APIHealth, setAPIHealth] = useState('');
@@ -32,17 +33,14 @@ const App = () => {
 				token: localStorage.token,
 				username: localStorage.username,
 			});
-			initiateOrder(localStorage.token)
-			.then(res => {
-				setOrder(res)
-			})
+			initiateOrder(localStorage.token).then((res) => {
+				setOrder(res);
+			});
 		} else {
-			initiateGuestCart()
-			.then(res => {
-				setOrder(res)
-			})
+			initiateGuestCart().then((res) => {
+				setOrder(res);
+			});
 		}
-		
 	}, []);
 
 	return (
@@ -53,7 +51,11 @@ const App = () => {
 						<h1>KC Liqours</h1>
 						<div>
 							<h2 className='white'>
-								Hello {loggedInUser.username ? loggedInUser.username : 'Guest'}!
+								Hello{' '}
+								{loggedInUser.username
+									? loggedInUser.username
+									: 'Guest'}
+								!
 							</h2>
 
 							<Link to='/cart'>
@@ -91,19 +93,54 @@ const App = () => {
 						<Route path='/home' element={<Home />} />
 						<Route
 							path='/products'
-							element={<Products order={order} setOrder={setOrder} cart={cart} setCart={setCart} token={loggedInUser.token}/>}
+							element={
+								<Products
+									order={order}
+									setOrder={setOrder}
+									cart={cart}
+									setCart={setCart}
+									token={loggedInUser.token}
+								/>
+							}
 						/>
 						<Route
 							path='/products/beer'
-							element={<Products order={order} setOrder={setOrder} cart={cart} setCart={setCart} token={loggedInUser.token} category='beer' />}
+							element={
+								<Products
+									order={order}
+									setOrder={setOrder}
+									cart={cart}
+									setCart={setCart}
+									token={loggedInUser.token}
+									category='beer'
+								/>
+							}
 						/>
 						<Route
 							path='/products/wine'
-							element={<Products order={order} setOrder={setOrder} cart={cart} setCart={setCart} token={loggedInUser.token} category='wine' />}
+							element={
+								<Products
+									order={order}
+									setOrder={setOrder}
+									cart={cart}
+									setCart={setCart}
+									token={loggedInUser.token}
+									category='wine'
+								/>
+							}
 						/>
 						<Route
 							path='/products/spirits'
-							element={<Products order={order} setOrder={setOrder} cart={cart} setCart={setCart} token={loggedInUser.token} category='spirits' />}
+							element={
+								<Products
+									order={order}
+									setOrder={setOrder}
+									cart={cart}
+									setCart={setCart}
+									token={loggedInUser.token}
+									category='spirits'
+								/>
+							}
 						/>
 						<Route
 							path='/register'
@@ -124,8 +161,16 @@ const App = () => {
 						></Route>
 						<Route
 							path='/cart'
-							element={<Cart order={order} cart={cart} setCart={setCart} token={loggedInUser.token}/>}
+							element={
+								<Cart
+									order={order}
+									cart={cart}
+									setCart={setCart}
+									token={loggedInUser.token}
+								/>
+							}
 						></Route>
+						<Route path='/checkout' element={<Checkout />}></Route>
 					</Routes>
 				</div>
 			</Router>
