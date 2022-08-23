@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { addProductToOrder, addProductToOrderGuest, getAllProducts } from '../axios-services';
-import { successMsg } from '.';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
