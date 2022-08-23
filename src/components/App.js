@@ -8,6 +8,7 @@ import Admin from './Admin';
 import Users from './Users';
 import CreateProdAdmin from './CreateProdAdmin';
 import EditProdAdmin from './EditProdAdmin';
+import { ShoppingCart } from '@mui/icons-material';
 import {
 	initiateGuestCart,
 	initiateOrder,
@@ -17,6 +18,7 @@ import {
 import '../style/App.css';
 import SingleProductView from './SingleProductView';
 import Cart from './Cart';
+import Checkout from './Checkout';
 
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import GitHubIcon from '@mui/icons-material/GitHub';
@@ -110,7 +112,7 @@ const App = () => {
 							</h2>
 
 							<Link className='white' to='/cart'>
-								<ShoppingCartIcon></ShoppingCartIcon>
+								<ShoppingCart></ShoppingCart>
 							</Link>
 						</div>
 					</div>
@@ -223,6 +225,16 @@ const App = () => {
 									order={order}
 									cart={cart}
 									setCart={setCart}
+									token={loggedInUser.token}
+								/>
+							}
+						></Route>
+						<Route
+							path='/checkout'
+							element={
+								<Checkout
+									order={order}
+									cart={cart}
 									token={loggedInUser.token}
 								/>
 							}
