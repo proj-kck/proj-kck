@@ -8,38 +8,21 @@ import Admin from './Admin';
 import Users from './Users';
 import CreateProdAdmin from './CreateProdAdmin';
 import EditProdAdmin from './EditProdAdmin';
-
-import { getAllProductsOnOrder, initiateGuestCart } from '../axios-services';
-
-
-// getAPIHealth is defined in our axios-services directory index.js
-// you can think of that directory as a collection of api adapters
-// where each adapter fetches specific info from our express server's /api route
-import { getAPIHealth } from '../axios-services';
+import { initiateGuestCart, initiateOrder, isTokenAdmin } from '../axios-services';
 import '../style/App.css';
 import SingleProductView from './SingleProductView';
 import Cart from './Cart';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 const App = () => {
-	const [APIHealth, setAPIHealth] = useState('');
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [loggedInUser, setLoggedInUser] = useState({});
 	const [cart, setCart] = useState([]);
+	const [order, setOrder] = useState();
+	const [isAdmin, setIsAdmin] = useState(false)
 
 	useEffect(() => {
-		// follow this pattern inside your useEffect calls:
-		// first, create an async function that will wrap your axios service adapter
-		// invoke the adapter, await the response, and set the data
-		const getAPIStatus = async () => {
-			const { healthy } = await getAPIHealth();
-			setAPIHealth(healthy ? 'api is up! :D' : 'api is down :/');
-		};
-
-		// second, after you've defined your getter above
-		// invoke it immediately after its declaration, inside the useEffect callback
-		getAPIStatus();
-
 		if (localStorage.token && localStorage.username) {
 			setLoggedInUser({
 				token: localStorage.token,
@@ -49,6 +32,15 @@ const App = () => {
 				.then(res => {
 					setOrder(res)
 				})
+			isTokenAdmin(localStorage.token)
+			.then(res => {
+				if (res === 'User is an authorized admin'){
+					setIsAdmin(true);
+				} else {
+					setIsAdmin(false);
+				}
+				console.log(res)
+			})
 			} else {
 				initiateGuestCart()
 				.then(res => {
@@ -62,15 +54,15 @@ const App = () => {
 			<Router>
 				<div className='navbar'>
 					<div className='title-cart'>
-						<h1>KC Liqours</h1>
+						<h1 className='site-title'>KC Liqours</h1>
 						<div>
 							<h2 className='white'>
 								Hello {loggedInUser.username ? loggedInUser.username : 'Guest'}!
 							</h2>
 
-							<Link to='/cart'>
-								<h2 className='white'>Cart</h2>
-							</Link>
+							<Link className='white' to='/cart'>
+								<ShoppingCartIcon></ShoppingCartIcon>
+							</ Link>
 						</div>
 					</div>
 					<nav>
@@ -80,9 +72,11 @@ const App = () => {
 						<Link className='link' to='/products'>
 							Products
 						</Link>
+						{isAdmin ? 
 						<Link className='link' to='/admin'>
 							Admin
 						</Link>
+						: null}
 						<Link className='link' to='/login'>
 							Login/Logout
 						</Link>
@@ -90,6 +84,7 @@ const App = () => {
 				</div>
 				<div className='main'>
 					<Routes>
+						<Route path='/' element={<Home></Home>}/>
 						<Route
 							path='/login'
 							element={
@@ -145,7 +140,7 @@ const App = () => {
 							}
 						></Route>
 						<Route
-							path='/products/id/:id'
+							path='/products/:id'
 							element={<SingleProductView />}
 						></Route>
 						<Route
@@ -158,16 +153,16 @@ const App = () => {
 							element={<Users token={loggedInUser.token}/>} />
 						<Route
 							path='/admin/createnewproduct'
-							element={<CreateProdAdmin />} />
+							element={<CreateProdAdmin token={loggedInUser.token}/>} />
 						<Route
 							path='/admin/editproduct'
-							element={<EditProdAdmin />} />
+							element={<EditProdAdmin token={loggedInUser.token}/>} />
+						<Route
+							path='/admin/editproduct/:id'
+							element={<SingleProductView edit={true} token={loggedInUser.token}/>} />
 					</Routes>
 				</div>
 			</Router>
-
-			<h1>Hello, World!</h1>
-			<p>API Status: {APIHealth}</p>
 		</div>
 	);
 };

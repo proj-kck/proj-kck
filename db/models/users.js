@@ -4,7 +4,9 @@ const bcrypt = require('bcrypt');
 
 
 
-async function createUser({username, password, email, is_admin = false}) {
+
+async function createUser({username, password, email, admin }) {
+
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     
@@ -13,7 +15,7 @@ async function createUser({username, password, email, is_admin = false}) {
       VALUES($1, $2, $3, $4)
       ON CONFLICT DO NOTHING
       RETURNING id, username, email, is_admin;
-    `, [username, hashedPassword, email, is_admin]);
+    `, [username, hashedPassword, email, admin]);
     
     return user;
   } catch (error) {

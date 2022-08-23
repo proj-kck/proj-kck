@@ -86,7 +86,7 @@ async function populateInitialData() {
     }
     
 
-    // // const user = initialUsers[1]
+    //  const user = initialUsers[1]
     // initialUsers.map(user => {users.createUser(user)})
     // console.log('Creating dummy orders...');
     // const orderTest = await orders.createOrder(user.id);
@@ -104,3 +104,4 @@ buildTables()
   .then(populateInitialData)
   .catch(console.error)
   .finally(()=> client.end())
+

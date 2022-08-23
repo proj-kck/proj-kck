@@ -12,18 +12,26 @@ const {
 	getUserByEmail,
 } = require('../db/models/users');
 const {requireAdmin} = require('./utils');
+
 usersRouter.get('/', requireAdmin, async (req, res, next) => {
 		try{
 			const users = await getAllUsers();
 			res.send({
 				users,
 			});
-			
 		} catch (error) {
 			next (error);
 		}
 	}
 );	
+
+usersRouter.get('/admin', requireAdmin, async (req, res, next) => {
+	try {
+		res.send('User is an authorized admin')
+	} catch (error) {
+		next (error)
+	}
+})
 
 usersRouter.post('/login', async (req, res, next) => {
 	const { username, password } = req.body;

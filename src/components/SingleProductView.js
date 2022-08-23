@@ -1,35 +1,133 @@
 import React, { useEffect } from 'react';
-import { Button } from '@mui/material';
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getProductById } from '../axios-services';
+import { editProduct, getProductById } from '../axios-services';
+import { TextField, Button, InputLabel, Select, MenuItem } from '@mui/material';
 import './SingleProductPage.css';
 
-const SingleProductView = () => {
+const SingleProductView = (props) => {
 	let navigate = useNavigate();
 	const { id } = useParams();
 	const [product, setProduct] = useState({});
+	const [name, setName] = useState(''); 
+    const [description, setDescription] = useState('');
+    const [price, setPrice] = useState('');
+    const [category, setCategory] = useState('');
+    const [img, setImg] = useState('');
+    const [stock, setStock] = useState('');
+	const edit = props.edit;
+	const token = props.token;
+
+	const submitHandler = async (evt) => {
+        evt.preventDefault();
+        try {
+            editProduct(token, product.id, name, description, price, category, img, stock)
+            .then(navigate('/admin'))
+        } catch (error) {
+            throw error;
+        }
+    };
 
 	useEffect(() => {
-		async function getData() {
-			const data = await getProductById(id);
-			setProduct(data);
-			if (!data.id) {
+		getProductById(id)
+		.then(res => {
+			setProduct(res)
+			if (edit) {
+				setName(res.name);
+				setDescription(res.description);
+				setPrice(res.price);
+				setCategory(res.category);
+				setImg(res.img);
+				setStock(res.quantity);
+			}
+			if (!res.id) {
 				navigate(-1);
 			}
-		}
-		getData();
-	});
+		});
+	}, []);
 
 	return (
 		<div id='single-product'>
 			<img src={product.img} alt={product.name} />
 			<div className='product-info'>
+				{!edit ? <>
 				<h2>
 					{product.name} ${product.price}
 				</h2>
 				<h3>{product.description}</h3>
-				<Button variant='contained'>Add to cart</Button>
+				<Button variant='contained'>Add to cart</Button> </>: <>
+				<TextField
+					id='outlined-required'
+					label='Name'
+					variant='outlined'
+					value={name}
+					onChange={(evt) => setName(evt.target.value)}
+                />
+                <br/> 
+                <TextField
+					id='outlined-required'
+					label='Description'
+					variant='outlined'
+					value={description}
+					onChange={(evt) => setDescription(evt.target.value)}
+                />
+                <br/> 
+                <TextField
+					id='outlined-required'
+					label='Price'
+					variant='outlined'
+					value={price}
+					onChange={(evt) => setPrice(evt.target.value)}
+                />
+                <br/> 
+                <InputLabel id="outlined-required">Category</InputLabel>
+                <Select
+                    labelId="category-select"
+                    id="outline-required"
+                    value={category}
+                    label="Category"
+                    onChange={(evt) => setCategory(evt.target.value)}
+                >
+                <MenuItem value={'beer'}>Beer</MenuItem>
+                <MenuItem value={'wine'}>Wine</MenuItem>
+                <MenuItem value={'spirit'}>Spirit</MenuItem>
+                </Select>
+                <br/> 
+                <TextField
+					id='outlined-required'
+					label='Image Url'
+					variant='outlined'
+					value={img}
+					onChange={(evt) => setImg(evt.target.value)}
+                />
+                <br/> 
+                <TextField
+					id='outlined-required'
+					label='Stock/Quantity'
+					variant='outlined'
+					value={stock}
+					onChange={(evt) => setStock(evt.target.value)}
+                />
+                <br/>   
+                <Button
+					variant='contained'
+					onClick={submitHandler}
+					type='submit'
+					>
+						Save Changes
+					</Button>
+				
+				</> }
+				<br/>
+				{edit ? 
+				<Button
+					variant='contained'
+					onClick={submitHandler}
+					type='submit'
+					color='warning'
+					>
+						Delete Product
+					</Button> : null}
 			</div>
 		</div>
 	);
