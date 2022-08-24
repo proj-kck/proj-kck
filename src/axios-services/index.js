@@ -32,7 +32,9 @@ export async function initiateGuestCart(){
 export async function getAllProductsOnOrder(orders_id){
 	try {
 		const { data } = await axios.get(`/api/product_orders/${orders_id}`);
-		return data;
+		const res = data.sort((a,b) => a.product_id - b.product_id);
+		console.log(res)
+		return res;
 	} catch (error) {
 		throw error;
 	}
