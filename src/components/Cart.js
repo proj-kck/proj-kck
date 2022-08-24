@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 // import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Cart = (props) => {
 	// const [order, setOrder] = useState();
+	const [total, setTotal] = useState(0);
 	const order = props.order;
 	const cart = props.cart;
 	const setCart = props.setCart;
@@ -20,13 +21,15 @@ const Cart = (props) => {
 				getAllProductsOnOrder(order.id)
 				.then(resProds => {
 					setCart(resProds)
+					setTotal(totalPrice);
 			})})
 		} else {
 			removeProductFromOrderGuest(product.product_id)
 			.then(res => {
 				getAllProductsOnOrderGuest()
 				.then(resProds => {
-					setCart(resProds)
+					setCart(resProds);
+					setTotal(totalPrice);
 				})
 			})
 		}
@@ -38,7 +41,8 @@ const Cart = (props) => {
 			.then(res => {
 				getAllProductsOnOrder(order.id)
 				.then(resProds => {
-					setCart(resProds)
+					setCart(resProds);
+					setTotal(totalPrice);
 			})})
 		} else {
 			const prod = {id: product.product_id, 
@@ -48,42 +52,49 @@ const Cart = (props) => {
 			.then(res => {
 				getAllProductsOnOrderGuest()
 				.then(resProds => {
-					setCart(resProds)
+					setCart(resProds);
+					setTotal(totalPrice);
 				})
 			})
 		}
 	};
 
 	useEffect(() => {
-		console.log(order)
 		if (order === undefined){
 			navigate('/');
 			return;
 		}
-		// if (localStorage.token && localStorage.username) {
-		// 	initiateOrder(localStorage.token)
-		// 		.then(res => {
-		// 			setOrder(res)
-		// 		})
-		// 	} else {
-		// 		initiateGuestCart()
-		// 		.then(res => {
-		// 			setOrder(res)
-		// 		})
-		// 	}
 
 		if (localStorage.token) {
 			getAllProductsOnOrder(order.id)
 			.then(res => {
-				setCart(res)
+				setCart(res);
 			})
 		} else {
 			getAllProductsOnOrderGuest()
 			.then(res => {
-				setCart(res)
+				setCart(res);
 			})
 		}	
+
+		
 	}, []);
+
+	useEffect(() => {
+		setTotal(totalPrice);
+	}, [cart])
+
+	const totalPrice = () => {
+		try {
+			let total = 0;
+			for (const item of cart) {
+				total += item.price_at_purchase * item.quantity_order;
+			}
+			return total.toFixed(2);
+		} catch (error) {
+			throw error;
+		}
+	}
 
 	return (
 		<div className='cart-area'>
@@ -98,7 +109,7 @@ const Cart = (props) => {
 						<tr key={item.product_name} id={item.id} >
 							<td>{item.product_name}</td>
 							<td style={{ textAlign: 'center'}}>{item.quantity_order}</td>
-							<td>{item.price_at_purchase * item.quantity_order}</td>
+							<td>{(item.price_at_purchase * item.quantity_order).toFixed(2)}</td>
 							<td>
 							<IconButton
 									onClick={(e) => handleAdd(e, item)}
@@ -118,6 +129,7 @@ const Cart = (props) => {
 							</td>
 						</tr>
 					)): null}
+					<tr><td><b style={{textAlign: 'center'}}>Total</b></td><td></td><td>{total}</td></tr>
 			</table>
 		</div>
 	);
