@@ -60,6 +60,7 @@ const Login = (props) => {
 					id='outlined-required'
 					label='Username'
 					variant='outlined'
+					color='primary'
 					value={username}
 					onChange={handleUsernameChange}
 				/> : <h2 class='loggedIn'>You are logged in as {loggedInUser.username}</h2> }
@@ -86,7 +87,7 @@ const Login = (props) => {
 						Logout
 					</Button> }
 				{' '}
-				{!loggedInUser.token ? <a href='/register'>Register?</a> : null }
+				{!loggedInUser.token ? <a href='/register'>Not Registered? Click Here</a> : null }
 			</form>
 			</div>
 		</div>

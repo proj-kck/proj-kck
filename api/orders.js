@@ -1,10 +1,6 @@
 const express = require('express');
 const ordersRouter = express.Router();
-
 const {createOrder, closeOrder, getOrderStatus, getOpenOrder } = require('../db/models/orders')
-
-const jwt = require('jsonwebtoken');
-const { TrendingUpTwoTone } = require('@mui/icons-material');
 const { requireUser } = require('./utils')
 
 ordersRouter.post('/', requireUser, async (req, res, next) => {
