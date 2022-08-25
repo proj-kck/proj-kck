@@ -6,38 +6,6 @@ const beers = [
         quantity: 100,
         img: 'https://origlio-marketing-product-images.s3.amazonaws.com/BrandSub_Yuengling-Lager.png'
     },
-    
-    {   name: 'Stella Artois',
-        price: 15.99,
-        description: '12pk Pale Lager',
-        category: 'beer',
-        quantity: 100,
-        img: 'https://toppng.com/uploads/preview/stella-artois-premium-lager-stella-artois-11563043667nih8eehser.png'
-    },
-
-    {   name: 'Guinness Draught',
-        price: 15.99,
-        description: '12pk Stout',
-        category: 'beer',
-        quantity: 100,
-        img: 'https://w7.pngwing.com/pngs/413/193/png-transparent-guinness-beer-stout-india-pale-ale-draft-beer.png'
-    },
-
-    {   name: 'Blue Moon Belgian White Wheat Beer',
-        price: 15.99,
-        description: '12pk Ale',
-        category: 'beer',
-        quantity: 100,
-        img: 'https://w7.pngwing.com/pngs/382/43/png-transparent-blue-moon-wheat-beer-ale-belgian-cuisine-liquor-flyer-wheat-beer-beer-bottle-blue-moon.png'
-    },
-
-    {   name: 'Heineken Lager',
-        price: 15.99,
-        description: '12pk Pale Lager',
-        category: 'beer',
-        quantity: 100,
-        img: 'https://www.pikpng.com/pngl/m/240-2408456_heineken-beer-bottle-png-clipart.png'
-    },
 
     {   name: 'Lagunitas IPA',
         price: 21.99,
@@ -71,13 +39,6 @@ const beers = [
         img: 'https://cdn.shoplightspeed.com/shops/652868/files/44471659/650x750x2/sierra-nevada-hazy-little-thing-ipa-192oz-single.jpg'
     },
 
-    {   name: 'Founders All Day IPA',
-        price: 25.99,
-        description: '12pk IPA',
-        category: 'beer',
-        quantity: 100,
-        img: 'https://img.favpng.com/3/6/13/founders-brewing-company-founder-s-all-day-ipa-india-pale-ale-beer-distilled-beverage-png-favpng-iGZBGVd5rW3zCATa0NptJcFRK.jpg'
-    },   
 ];
 
 const wines = [

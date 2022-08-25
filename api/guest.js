@@ -38,7 +38,7 @@ guestRouter.post("/items", (req, res, next) => {
         for (const item of items){
             if (item.product_id === cartItem.product_id){
                 item.quantity_order += 1;
-                res.send(200);
+                res.sendStatus(200);
                 return;
             }
         }
