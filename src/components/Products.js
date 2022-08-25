@@ -1,24 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
-import { addProductToOrder, addProductToOrderGuest, getAllProducts } from '../axios-services';
-import { successMsg } from '.';
+import { addProductToOrder, addProductToOrderGuest, getAllProducts, initiateOrder, initiateGuestCart, isTokenAdmin } from '../axios-services';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 
 
 const Products = (props) => {
 	const [products, setProducts] = useState([]);
+	const [loggedInUser, setLoggedInUser] = useState({});
+	const [order, setOrder] = useState();
+	const [isAdmin, setIsAdmin] = useState(false);
 	const category = props.category;
-	const token = props.token;
 	const edit = props.edit
-	const order = props.order;
-	const [productLink, setProductLink] = useState('')
+	// const order = props.order;
+	const [productLink, setProductLink] = useState('');
+	const [open, setOpen] = useState(false);
 
 	useEffect(() => {
 			getAllProducts(category)
 			.then(res => {
 				setProducts(res)
 			});
+
+			if (localStorage.token && localStorage.username) {
+				setLoggedInUser({
+					token: localStorage.token,
+					username: localStorage.username,
+				});
+				initiateOrder(localStorage.token)
+					.then(res => {
+						setOrder(res)
+					})
+				isTokenAdmin(localStorage.token)
+				.then(res => {
+					if (res === 'User is an authorized admin'){
+						setIsAdmin(true);
+					} else {
+						setIsAdmin(false);
+					}
+				})
+				} else {
+					initiateGuestCart()
+					.then(res => {
+						setOrder(res)
+					})
+				}
 	}, [category]);
 
 	const handleEdit = (e) => {
@@ -42,22 +70,25 @@ const Products = (props) => {
 		e.target.parentNode.parentNode.className = '';
 	};
 
+	const handleClose = (event) => {
+		setOpen(false);
+	  };
+
 	const handleAddToCart = (e) => {
 		let currItem = products[e.target.id];
 
-		if (token){
-			addProductToOrder(currItem, order, token)
-			.then(res => {
-				successMsg('Product added to cart.')
-			});
+		if (loggedInUser.token){
+			addProductToOrder(currItem, order, loggedInUser.token)
 		} else {
 			addProductToOrderGuest(currItem)
-			.then(res => {
-				successMsg('Product added to cart.')
-			})
 		}
 		
 		edit ? setProductLink('/products/edit/') : setProductLink('/products/');
+
+		if (!edit) {
+			setOpen(true)
+			setTimeout(function(){ setOpen(false)}, 3000);
+		}
 		
 	};
 
@@ -104,6 +135,11 @@ const Products = (props) => {
 					);
 				})}
 			</ul>
+			<Snackbar anchorOrigin={{vertical: 'bottom', horizontal: 'center' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+  				<Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+    				Product Added to Cart
+  				</Alert>
+			</Snackbar>
 		</div>
 	);
 };

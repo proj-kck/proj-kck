@@ -1,4 +1,3 @@
-import { ErrorSharp } from '@mui/icons-material';
 import axios from 'axios';
 
 export async function getAPIHealth() {
@@ -33,7 +32,9 @@ export async function initiateGuestCart(){
 export async function getAllProductsOnOrder(orders_id){
 	try {
 		const { data } = await axios.get(`/api/product_orders/${orders_id}`);
-		return data;
+		const res = data.sort((a,b) => a.product_id - b.product_id);
+		console.log(res)
+		return res;
 	} catch (error) {
 		throw error;
 	}
@@ -43,6 +44,23 @@ export async function getAllProductsOnOrderGuest(){
 	try {
 		const { data } = await axios.get('/api/guest/items');
 		return data.items;
+	} catch (error) {
+		throw error;
+	}
+}
+
+export async function addProductToOrder_Cart(product, order, token){
+	try {
+		const postData = {
+			orders_id: order.id,
+			product_id: product.product_id,
+			product_name: product.product_name,
+			price_at_purchase: product.price_at_purchase,
+			quantity_order: 1
+		}
+		axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+		const { data } = await axios.post(`/api/product_orders/add`, postData);
+		return data;
 	} catch (error) {
 		throw error;
 	}

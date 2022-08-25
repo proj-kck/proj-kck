@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import { TextField, Button, InputLabel, Select, MenuItem } from '@mui/material';
 import { createProduct } from '../axios-services';
 import { useNavigate } from 'react-router-dom';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 const CreatingProd = (props) => {
     const [name, setName] = useState(''); 
@@ -10,18 +12,25 @@ const CreatingProd = (props) => {
     const [category, setCategory] = useState('');
     const [img, setImg] = useState('');
     const [stock, setStock] = useState('');
-    const navigate = useNavigate();
+    const [open, setOpen] = useState(false)
     const token = props.token;
 
     const submitHandler = async (evt) => {
         evt.preventDefault();
         try {
             createProduct(token, name, description, price, category, img, stock)
-            .then(navigate('/admin'))
+            .then(() => {
+                setOpen(true)
+			    setTimeout(function(){ setOpen(false)}, 3000);
+            })
         } catch (error) {
             throw error;
         }
     };
+
+    const handleClose = (event) => {
+		setOpen(false);
+	  };
 
     return (
         <div>
@@ -89,6 +98,12 @@ const CreatingProd = (props) => {
 						Add Product
 					</Button>           
             </form>
+            <br/><br/>
+            <Snackbar anchorOrigin={{vertical: 'bottom', horizontal: 'center' }} open={open} autoHideDuration={6000} onRequestClose={handleClose}>
+  				<Alert onRequestClose={handleClose} severity="success" sx={{ width: '100%' }}>
+    				Product Added
+  				</Alert>
+			</Snackbar>
         </div>
     )
 }
