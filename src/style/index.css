@@ -2,7 +2,7 @@
 
 * {
 	box-sizing: border-box;
-	font-family:Georgia, 'Times New Roman', Times, serif;
+	font-family: Georgia, 'Times New Roman', Times, serif;
 	transition: all 0.3s ease-in-out;
 }
 
@@ -20,14 +20,13 @@ body {
 	margin: 0;
 	padding: 0;
 	height: 100vh;
-
+	background-attachment: fixed;
 	width: 100vw;
 	/* background-image: url("https://images.squarespace-cdn.com/content/v1/5ac2cd53b1059801a0b1eb44/1523895904137-8J2QWI9MU430UYXULQTE/2017-05-23.jpg?format=2500w"); */
 
 	/* width: 100vw; */
 	position: relative;
 	min-height: 100vh;
-
 }
 .form-container {
 	background-color: white;
@@ -44,8 +43,8 @@ body {
 	position: relative;
 	padding: 34px;
 	color: #444;
-	cursor: pointer; */ 
-	/* background-color: white;
+	cursor: pointer; */
+/* background-color: white;
 	height: 15rem;
 	display: flex;
 	justify-content: center;
@@ -63,7 +62,7 @@ li {
 	border-radius: 10px;
 }
 .navbar {
-	background-color:rgb(86, 17, 17);
+	background-color: rgb(86, 17, 17);
 	border-bottom: 1px solid #dee2e6;
 	display: flex;
 	flex-direction: column;
@@ -83,7 +82,7 @@ li {
 	align-items: center;
 }
 .link {
-	background-color:rgb(86, 17, 17);
+	background-color: rgb(86, 17, 17);
 	transition: all 0.3s ease-in-out;
 	width: 100%;
 	height: 3rem;
@@ -143,9 +142,9 @@ h2 {
 	background-color: rgb(86, 17, 17);
 	position: relative;
 	width: 100%;
-  	height: 15vh;
-  	clear: both;
-  	bottom: 0;
+	height: 15vh;
+	clear: both;
+	bottom: 0;
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
@@ -167,7 +166,10 @@ h2 {
 	width: 30vw;
 }
 
-.project-links-container, .kenny-links-container, .cameron-links-container, .kesty-links-container {
+.project-links-container,
+.kenny-links-container,
+.cameron-links-container,
+.kesty-links-container {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -215,6 +217,10 @@ h4 {
 	margin-top: 0.5rem;
 }
 
+#checkout-btn{
+	width: 29rem;
+}
+
 form {
 	display: flex;
 	flex-direction: column;
@@ -247,4 +253,3 @@ form {
 		40px 60px 36px -11px rgba(0, 0, 0, 0.09);
 	background-color: white;
 }
-
