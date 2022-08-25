@@ -21,6 +21,7 @@ const CreatingProd = (props) => {
 	const [open, setOpen] = useState(false);
 	const token = props.token;
 
+
 	const submitHandler = async (evt) => {
 		evt.preventDefault();
 		try {
