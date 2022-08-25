@@ -13,7 +13,7 @@ const CreatingProd = (props) => {
     const [img, setImg] = useState('');
     const [stock, setStock] = useState('');
     const [open, setOpen] = useState(false)
-    const token = props.token;
+    const token = props.token;h
 
     const submitHandler = async (evt) => {
         evt.preventDefault();
