@@ -239,7 +239,36 @@ const App = () => {
 								/>
 							}
 						></Route>
-					</Routes>
+						<Route 
+							path='/admin'
+							element={<Admin></Admin>}
+							></Route>
+						<Route
+							path='/admin/viewusers'
+							element={<Users token={localStorage.token}></Users>}
+						></Route>
+						<Route
+							path='/admin/createnewproduct'
+							element={<CreateProdAdmin token={localStorage.token}></CreateProdAdmin>}
+						></Route>
+						<Route
+							path='/admin/editproduct'
+							element={<Products 
+								edit={true}
+								order={order}
+								setOrder={setOrder}
+								cart={cart}
+								setCart={setCart}
+								token={localStorage.token}></Products>}
+						></Route>
+						<Route
+							path='/admin/editproduct/:id'
+							element={<SingleProductView 
+							edit={true}
+							token={localStorage.token}>
+						</SingleProductView>}
+						></Route>
+						</Routes>
 				</div>
 				<div className='footer-container'>
 					<div className='login-links-container'>
