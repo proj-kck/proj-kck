@@ -14,8 +14,8 @@ const Products = (props) => {
 	const [isAdmin, setIsAdmin] = useState(false);
 	const category = props.category;
 	const edit = props.edit
-	// const order = props.order;
-	const [productLink, setProductLink] = useState('');
+	// // const order = props.order;
+	// const [productLink, setProductLink] = useState('');
 	const [open, setOpen] = useState(false);
 
 	useEffect(() => {
@@ -83,7 +83,7 @@ const Products = (props) => {
 			addProductToOrderGuest(currItem)
 		}
 		
-		edit ? setProductLink('/products/edit/') : setProductLink('/products/');
+		// edit ? setProductLink('/products/edit/') : setProductLink('/products/');
 
 		if (!edit) {
 			setOpen(true)
@@ -99,7 +99,7 @@ const Products = (props) => {
 					return (
 						<li id={product.id} key={product.id}>
 							<div className='product'>
-								<Link to={`${productLink}${product.id}`}>
+								<Link to={`${product.id}`}>
 									<img
 										src={product.img}
 										alt={`${product.name}`}
