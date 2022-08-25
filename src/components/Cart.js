@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { Button } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
-// import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import {
@@ -10,10 +10,9 @@ import {
 	getAllProductsOnOrderGuest,
 	removeProductFromOrder,
 	removeProductFromOrderGuest,
-	initiateOrder,
-	initiateGuestCart,
 } from '../axios-services';
 import { useNavigate } from 'react-router-dom';
+import Checkout from './Checkout';
 
 const Cart = (props) => {
 	// const [order, setOrder] = useState();
@@ -99,6 +98,10 @@ const Cart = (props) => {
 		}
 	};
 
+	const handleCheckout = () => {
+		navigate('/checkout')
+	}
+
 	return (
 		<div className='cart-area'>
 			<h2 style={{ textAlign: 'center' }}>Cart</h2>
@@ -149,7 +152,14 @@ const Cart = (props) => {
 					<td>{total}</td>
 				</tr>
 			</table>
+			<br/>
+			<Button
+				id='checkout-btn'
+				variant="contained"
+				onClick={handleCheckout}
+			>Checkout</ Button>
 		</div>
+		
 	);
 };
 

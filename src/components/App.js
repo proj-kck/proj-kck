@@ -243,9 +243,6 @@ const App = () => {
 				</div>
 				<div className='footer-container'>
 					<div className='login-links-container'>
-						<p className='footer-link' onClick={handleLoginAdmin}>
-							Login As Admin
-						</p>
 						<p className='footer-link' onClick={handleLoginUser}>
 							Login As User
 						</p>

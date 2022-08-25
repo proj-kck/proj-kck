@@ -10,7 +10,8 @@ const Checkout = () => {
 	const navigate = useNavigate();
 
 	const handleClick = () => {
-		navigate('/home');
+		alert('Order has been placed. You will recieve and email with conformation.')
+		navigate('/home')
 	};
 
 	return (

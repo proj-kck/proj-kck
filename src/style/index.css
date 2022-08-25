@@ -217,6 +217,10 @@ h4 {
 	margin-top: 0.5rem;
 }
 
+#checkout-btn{
+	width: 29rem;
+}
+
 form {
 	display: flex;
 	flex-direction: column;
