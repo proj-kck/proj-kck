@@ -137,6 +137,24 @@ const App = () => {
 					<Routes>
 						<Route path='/' element={<Home></Home>} />
 						<Route
+							path='/products/wine/:id'
+							element={<SingleProductView 
+							token={localStorage.token}>
+						</SingleProductView>}
+						></Route>
+						<Route
+							path='/products/beer/:id'
+							element={<SingleProductView 
+							token={localStorage.token}>
+						</SingleProductView>}
+						></Route>
+						<Route
+							path='/products/spirit/:id'
+							element={<SingleProductView 
+							token={localStorage.token}>
+						</SingleProductView>}
+						></Route>
+						<Route
 							path='/login'
 							element={
 								<Login
