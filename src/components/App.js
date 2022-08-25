@@ -7,7 +7,6 @@ import Products from './Products';
 import Admin from './Admin';
 import Users from './Users';
 import CreateProdAdmin from './CreateProdAdmin';
-import EditProdAdmin from './EditProdAdmin';
 import { ShoppingCart } from '@mui/icons-material';
 import {
 	initiateGuestCart,
@@ -19,7 +18,6 @@ import '../style/App.css';
 import SingleProductView from './SingleProductView';
 import Cart from './Cart';
 import Checkout from './Checkout';
-
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import { IconButton } from '@mui/material';

@@ -8,7 +8,6 @@ import {
 	Paper,
 } from '@mui/material';
 import { createProduct } from '../axios-services';
-import { useNavigate } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 const CreatingProd = (props) => {
