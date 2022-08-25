@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@mui/material';
+import { Button, Paper } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -99,67 +99,72 @@ const Cart = (props) => {
 	};
 
 	const handleCheckout = () => {
-		navigate('/checkout')
-	}
+		navigate('/checkout');
+	};
 
 	return (
 		<div className='cart-area'>
-			<h2 style={{ textAlign: 'center' }}>Cart</h2>
-			<table>
-				<tr>
-					<th>Item</th>
-					<th>Quantity</th>
-					<th>Price</th>
-				</tr>
-				{cart
-					? cart.map((item) => (
-							<tr key={item.product_name} id={item.id}>
-								<td>{item.product_name}</td>
-								<td style={{ textAlign: 'center' }}>
-									{item.quantity_order}
-								</td>
-								<td>
-									{(
-										item.price_at_purchase *
-										item.quantity_order
-									).toFixed(2)}
-								</td>
-								<td>
-									<IconButton
-										onClick={(e) => handleAdd(e, item)}
-										id={item.product_id}
-										style={{ color: '#28B463' }}
-									>
-										<AddIcon></AddIcon>
-									</IconButton>
+			<Paper>
+				<h2 style={{ textAlign: 'center' }}>Cart</h2>
+				<table>
+					<tr>
+						<th>Item</th>
+						<th>Quantity</th>
+						<th>Price</th>
+					</tr>
+					{cart
+						? cart.map((item) => (
+								<tr key={item.product_name} id={item.id}>
+									<td>{item.product_name}</td>
+									<td style={{ textAlign: 'center' }}>
+										{item.quantity_order}
+									</td>
+									<td>
+										{(
+											item.price_at_purchase *
+											item.quantity_order
+										).toFixed(2)}
+									</td>
+									<td>
+										<IconButton
+											onClick={(e) => handleAdd(e, item)}
+											id={item.product_id}
+											style={{ color: '#28B463' }}
+										>
+											<AddIcon></AddIcon>
+										</IconButton>
 
-									<IconButton
-										onClick={(e) => handleDelete(e, item)}
-										id={item.product_id}
-										style={{ color: '#D35400' }}
-									>
-										<RemoveIcon></RemoveIcon>
-									</IconButton>
-								</td>
-							</tr>
-					  ))
-					: null}
-				<tr>
-					<td>
-						<b style={{ textAlign: 'center' }}>Total</b>
-					</td>
-					<td></td>
-					<td>{total}</td>
-				</tr>
-			</table>
-			<br/>
-			<Button
-				id='checkout-btn'
-				variant="contained"
-				onClick={handleCheckout}
-			>Checkout</ Button>
+										<IconButton
+											onClick={(e) =>
+												handleDelete(e, item)
+											}
+											id={item.product_id}
+											style={{ color: '#D35400' }}
+										>
+											<RemoveIcon></RemoveIcon>
+										</IconButton>
+									</td>
+								</tr>
+						  ))
+						: null}
+					<tr>
+						<td>
+							<b style={{ textAlign: 'center' }}>Total</b>
+						</td>
+						<td></td>
+						<td>{total}</td>
+					</tr>
+				</table>
+				<br />
+				<Button
+					id='checkout-btn'
+					variant='contained'
+					onClick={handleCheckout}
+				>
+					Checkout
+				</Button>
+			</Paper>
 		</div>
-		
 	);
 };
 
