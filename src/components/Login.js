@@ -2,8 +2,6 @@ import React from 'react';
 import { TextField, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../axios-services';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
 import { Paper } from '@mui/material';
 
 const Login = (props) => {
