@@ -86,7 +86,7 @@ const wines = [
         description: "Merlot, Red",
         category: 'wine',
         quantity: 100,
-        img: "https://www.totalwine.com/dynamic/490x/media/sys_master/twmmedia/he4/h63/16012953288734.png"
+        img: "https://images.vivino.com/thumbs/qxm4X_OqSaeZJCQP20QYKg_pb_x960.png"
     },
 
     {   name: "Napa Valley Peju",
